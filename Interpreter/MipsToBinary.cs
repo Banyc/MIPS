@@ -45,14 +45,20 @@ namespace MIPS_interpreter.Interpreter
 
         private uint GetAddress(ProgramInfo prog, string targetLabelIdentity)
         {
+            bool isFound = false;
             uint count = 0;
             foreach (Statement stat in prog.Statements)
             {
                 if (stat.Label?.Identity == targetLabelIdentity)
+                {
+                    isFound = true;
                     break;
+                }
                 count += 1;
             }
             // TODO: report when label not found
+            if (!isFound)
+                Console.WriteLine($"[ERROR] Label \"{targetLabelIdentity}\" not found!");
             return count;
         }
 
@@ -61,7 +67,7 @@ namespace MIPS_interpreter.Interpreter
             uint count = 0;
             foreach (Statement stat in prog.Statements)
             {
-                if (stat == statement)
+                if (Object.ReferenceEquals(stat, statement))
                     break;
                 count += 1;
             }
