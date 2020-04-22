@@ -36,7 +36,7 @@ namespace MIPS_interpreter.Interpreter
                     {
                         uint targetAddress = GetAddress(prog, stat.Instruction.TargetLabelIdentity);
                         uint thisAddress = GetAddress(prog, stat);
-                        stat.Instruction.Immediate = (int)targetAddress - (int)thisAddress;
+                        stat.Instruction.Immediate = (int)targetAddress - (int)thisAddress - 1;
                     }
                 }
             }
@@ -52,6 +52,7 @@ namespace MIPS_interpreter.Interpreter
                     break;
                 count += 1;
             }
+            // TODO: report when label not found
             return count;
         }
 
