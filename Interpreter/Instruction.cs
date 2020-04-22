@@ -104,6 +104,42 @@ namespace MIPS_interpreter.Interpreter
         // pseudo instruction could be split to several intructions
         public Instruction NextInstruction = null;
 
+        public Instruction()
+        {
+
+        }
+        
+        public Instruction(string binary)
+        {
+            if (this.Opcode == Opcode.RType)
+                this.Type = FormatType.Register;
+            else if (this.Opcode == Opcode.j || this.Opcode == Opcode.jal)
+                this.Type = FormatType.Jump;
+            else
+                this.Type = FormatType.Immediate;
+            this.Opcode = (Opcode)Convert.ToUInt32(binary.Substring(0, 6), 2);
+            switch (this.Type)
+            {
+                case FormatType.Register:
+                    this.Rs = (RegisterType)Convert.ToUInt32(binary.Substring(6, 5), 2);
+                    this.Rt = (RegisterType)Convert.ToUInt32(binary.Substring(11, 5), 2);
+                    this.Rd = (RegisterType)Convert.ToUInt32(binary.Substring(16, 5), 2);
+                    this.Shamt = Convert.ToUInt32(binary.Substring(21, 5), 2);
+                    this.Funct = (Funct)Convert.ToUInt32(binary.Substring(26, 6), 2);
+                    break;
+                case FormatType.Immediate:
+                    this.Rs = (RegisterType)Convert.ToUInt32(binary.Substring(6, 5), 2);
+                    this.Rt = (RegisterType)Convert.ToUInt32(binary.Substring(11, 5), 2);
+                    string immBinary = binary.Substring(16, 16);
+                    immBinary = new string(immBinary[0],16) + immBinary;
+                    this.Immediate = Convert.ToInt32(immBinary, 2);
+                    break;
+                case FormatType.Jump:
+                    this.WordAddress = Convert.ToUInt32(binary.Substring(6, 26), 2);
+                    break;
+            }
+        }
+        
         public string ToBinaryString()
         {
             string binary = "";
