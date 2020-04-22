@@ -1,6 +1,6 @@
 namespace MIPS_interpreter.Interpreter
 {
-    public enum Register
+    public enum RegisterType
     {
         zero,
         // reserved for assembler

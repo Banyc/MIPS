@@ -74,9 +74,9 @@ namespace MIPS_interpreter.Interpreter
         public override object VisitOp_add([NotNull] MipsAsmParser.Op_addContext context)
         {
             Instruction obj = new Instruction();
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
-            obj.Rd = (Register)Visit(context.rd);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
             obj.Funct = Funct.add;
             return obj;
         }
@@ -85,8 +85,8 @@ namespace MIPS_interpreter.Interpreter
         {
             Instruction obj = new Instruction();
             obj.Opcode = Opcode.addi;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.Immediate = (int)Visit(context.signed_imm());
             return obj;
         }
@@ -95,8 +95,8 @@ namespace MIPS_interpreter.Interpreter
         {
             Instruction obj = new Instruction();
             obj.Opcode = Opcode.addiu;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.Immediate = (int)Visit(context.usigned_imm());
             return obj;
         }
@@ -104,9 +104,9 @@ namespace MIPS_interpreter.Interpreter
         public override object VisitOp_addu([NotNull] MipsAsmParser.Op_adduContext context)
         {
             Instruction obj = new Instruction();
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
-            obj.Rd = (Register)Visit(context.rd);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
             obj.Funct = Funct.addu;
             return obj;
         }
@@ -114,9 +114,9 @@ namespace MIPS_interpreter.Interpreter
         public override object VisitOp_and([NotNull] MipsAsmParser.Op_andContext context)
         {
             Instruction obj = new Instruction();
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
-            obj.Rd = (Register)Visit(context.rd);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
             obj.Funct = Funct.and;
             return obj;
         }
@@ -125,8 +125,8 @@ namespace MIPS_interpreter.Interpreter
         {
             Instruction obj = new Instruction();
             obj.Opcode = Opcode.addi;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.Immediate = (int)Visit(context.usigned_imm());
             return obj;
         }
@@ -135,8 +135,8 @@ namespace MIPS_interpreter.Interpreter
         {
             Instruction obj = new Instruction();
             obj.Opcode = Opcode.beq;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.TargetLabelIdentity = context.iden().GetText();
             return obj;
         }
@@ -150,8 +150,8 @@ namespace MIPS_interpreter.Interpreter
         {
             Instruction obj = new Instruction();
             obj.Opcode = Opcode.bne;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.TargetLabelIdentity = context.iden().GetText();
             return obj;
         }
@@ -211,8 +211,8 @@ namespace MIPS_interpreter.Interpreter
         {
             Instruction obj = new Instruction();
             obj.Opcode = Opcode.lw;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.Immediate = (int)Visit(context.signed_imm());
             return obj;
         }
@@ -260,9 +260,9 @@ namespace MIPS_interpreter.Interpreter
         public override object VisitOp_slt([NotNull] MipsAsmParser.Op_sltContext context)
         {
             Instruction obj = new Instruction();
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
-            obj.Rd = (Register)Visit(context.rd);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
             obj.Funct = Funct.slt;
             return obj;
         }
@@ -270,9 +270,9 @@ namespace MIPS_interpreter.Interpreter
         public override object VisitOp_sltu([NotNull] MipsAsmParser.Op_sltuContext context)
         {
             Instruction obj = new Instruction();
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
-            obj.Rd = (Register)Visit(context.rd);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
             obj.Funct = Funct.sltu;
             return obj;
         }
@@ -295,9 +295,9 @@ namespace MIPS_interpreter.Interpreter
         public override object VisitOp_sub([NotNull] MipsAsmParser.Op_subContext context)
         {
             Instruction obj = new Instruction();
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
-            obj.Rd = (Register)Visit(context.rd);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
             obj.Funct = Funct.sub;
             return obj;
         }
@@ -306,8 +306,8 @@ namespace MIPS_interpreter.Interpreter
         {
             Instruction obj = new Instruction();
             obj.Opcode = Opcode.sw;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.Immediate = (int)Visit(context.signed_imm());
             return obj;
         }
@@ -315,9 +315,9 @@ namespace MIPS_interpreter.Interpreter
         public override object VisitOp_xor([NotNull] MipsAsmParser.Op_xorContext context)
         {
             Instruction obj = new Instruction();
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
-            obj.Rd = (Register)Visit(context.rd);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
             obj.Funct = Funct.xor;
             return obj;
         }
@@ -348,24 +348,24 @@ namespace MIPS_interpreter.Interpreter
 
         public override object VisitReg([NotNull] MipsAsmParser.RegContext context)
         {
-            Register reg = Register.zero;
+            RegisterType reg = RegisterType.zero;
             string ret = context.children[0].GetText();
             switch (ret)
             {
                 case "$zero":
-                    reg = Register.zero;
+                    reg = RegisterType.zero;
                     break;
                 case "$sp":
-                    reg = Register.sp;
+                    reg = RegisterType.sp;
                     break;
                 case "$fp":
-                    reg = Register.fp;
+                    reg = RegisterType.fp;
                     break;
                 case "$ra":
-                    reg = Register.ra;
+                    reg = RegisterType.ra;
                     break;
                 default:
-                    reg = (Register)Enum.Parse(typeof(Register), ret.Substring(1));
+                    reg = (RegisterType)Enum.Parse(typeof(RegisterType), ret.Substring(1));
                     break;
             }
             return reg;
@@ -425,8 +425,8 @@ namespace MIPS_interpreter.Interpreter
             Instruction obj = new Instruction();
             obj.Type = FormatType.Immediate;
             obj.Opcode = Opcode.addi;
-            obj.Rs = (Register)Visit(context.rs);
-            obj.Rt = (Register)Visit(context.rt);
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
             obj.Immediate = 0;
             return obj;
         }
@@ -438,16 +438,16 @@ namespace MIPS_interpreter.Interpreter
             Instruction slt = new Instruction();
             slt.Type = FormatType.Register;
             slt.Opcode = Opcode.RType;
-            slt.Rs = (Register)Visit(context.rt);
-            slt.Rt = (Register)Visit(context.rs);
-            slt.Rd = Register.at;
+            slt.Rs = (RegisterType)Visit(context.rt);
+            slt.Rt = (RegisterType)Visit(context.rs);
+            slt.Rd = RegisterType.at;
             slt.Funct = Funct.slt;
             // + bne at, zero, label
             Instruction bne = new Instruction();
             bne.Type = FormatType.Immediate;
             bne.Opcode = Opcode.bne;
-            bne.Rs = Register.at;
-            bne.Rt = Register.zero;
+            bne.Rs = RegisterType.at;
+            bne.Rt = RegisterType.zero;
             bne.TargetLabelIdentity = context.target.GetText();
 
             slt.NextInstruction = bne;

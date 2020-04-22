@@ -84,12 +84,12 @@ namespace MIPS_interpreter.Interpreter
         public Opcode Opcode;
         // R Format
         // I Format
-        public Register Rs;
+        public RegisterType Rs;
         // R Format
         // I Format
-        public Register Rt;
+        public RegisterType Rt;
         // R Format
-        public Register Rd;
+        public RegisterType Rd;
         // R Format
         public uint Shamt = 0;  // shift amount
         // R Format
