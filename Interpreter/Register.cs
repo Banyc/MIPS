@@ -6,6 +6,7 @@ namespace MIPS_interpreter.Interpreter
         // reserved for assembler
         at,
         // values
+        // Stores results
         v0 = 2,
         v1,
         // arguments
@@ -13,7 +14,7 @@ namespace MIPS_interpreter.Interpreter
         a1,
         a2,
         a3,
-        // temp
+        // temp, not saved
         t0,
         t1,
         t2,
@@ -24,7 +25,7 @@ namespace MIPS_interpreter.Interpreter
         t7,
         t8 = 24,
         t9,
-        // saved
+        // Contents saved for use later
         s0 = 16,
         s1,
         s2,
@@ -33,7 +34,14 @@ namespace MIPS_interpreter.Interpreter
         s5,
         s6,
         s7,
+        // Reserved by operating system
+        k0 = 26,
+        k1,
+        // Global pointer
+        gp = 28,
+        // Stack pointer
         sp = 29,
+        // Frame pointer
         fp = 30,
         // return address
         ra = 31,
