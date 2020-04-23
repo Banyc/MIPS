@@ -1,5 +1,6 @@
 
 using System;
+using System.Text;
 
 namespace MIPS_interpreter.Interpreter
 {
@@ -108,8 +109,23 @@ namespace MIPS_interpreter.Interpreter
         {
 
         }
-        
+        public Instruction(byte[] binary)
+        {
+            StringBuilder builder = new StringBuilder();
+            int i;
+            for (i = 0; i < 4; i++)
+            {
+                string binaryStr = Convert.ToString(binary[i], 2).PadLeft(8, '0');
+                builder.Append(binaryStr);
+            }
+            Initialize(builder.ToString());
+        }
         public Instruction(string binary)
+        {
+            Initialize(binary);
+        }
+
+        private void Initialize(string binary)
         {
             // Parsing binary code is based on Opcode
             this.Opcode = (Opcode)Convert.ToUInt32(binary.Substring(0, 6), 2);
@@ -132,7 +148,7 @@ namespace MIPS_interpreter.Interpreter
                     this.Rs = (RegisterType)Convert.ToUInt32(binary.Substring(6, 5), 2);
                     this.Rt = (RegisterType)Convert.ToUInt32(binary.Substring(11, 5), 2);
                     string immBinary = binary.Substring(16, 16);
-                    immBinary = new string(immBinary[0],16) + immBinary;
+                    immBinary = new string(immBinary[0], 16) + immBinary;
                     this.Immediate = Convert.ToInt32(immBinary, 2);
                     break;
                 case FormatType.Jump:
@@ -140,33 +156,77 @@ namespace MIPS_interpreter.Interpreter
                     break;
             }
         }
-        
+
         public string ToBinaryString()
         {
-            string binary = "";
-            binary += Convert.ToString((int)this.Opcode, 2).PadLeft(6, '0');
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Convert.ToString((int)this.Opcode, 2).PadLeft(6, '0'));
             string tmp;
             switch (this.Type)
             {
                 case FormatType.Register:
-                    binary += Convert.ToString((uint)this.Rs, 2).PadLeft(5, '0');
-                    binary += Convert.ToString((uint)this.Rt, 2).PadLeft(5, '0');
-                    binary += Convert.ToString((uint)this.Rd, 2).PadLeft(5, '0');
+                    builder.Append(Convert.ToString((uint)this.Rs, 2).PadLeft(5, '0'));
+                    builder.Append(Convert.ToString((uint)this.Rt, 2).PadLeft(5, '0'));
+                    builder.Append(Convert.ToString((uint)this.Rd, 2).PadLeft(5, '0'));
                     tmp = Convert.ToString((int)this.Shamt, 2).PadLeft(5, '0');
-                    binary += tmp.Substring(tmp.Length - 5);  // negative number has a fixed length
-                    binary += Convert.ToString((uint)this.Funct, 2).PadLeft(6, '0');
+                    builder.Append(tmp.Substring(tmp.Length - 5));  // negative number has a fixed length
+                    builder.Append(Convert.ToString((uint)this.Funct, 2).PadLeft(6, '0'));
                     break;
                 case FormatType.Immediate:
-                    binary += Convert.ToString((uint)this.Rs, 2).PadLeft(5, '0');
-                    binary += Convert.ToString((uint)this.Rt, 2).PadLeft(5, '0');
+                    builder.Append(Convert.ToString((uint)this.Rs, 2).PadLeft(5, '0'));
+                    builder.Append(Convert.ToString((uint)this.Rt, 2).PadLeft(5, '0'));
                     tmp = Convert.ToString((int)this.Immediate, 2).PadLeft(16, '0');
-                    binary += tmp.Substring(tmp.Length - 16);  // negative number has a fixed length
+                    builder.Append(tmp.Substring(tmp.Length - 16));  // negative number has a fixed length
                     break;
                 case FormatType.Jump:
-                    binary += Convert.ToString((uint)this.WordAddress, 2).PadLeft(26, '0');
+                    builder.Append(Convert.ToString((uint)this.WordAddress, 2).PadLeft(26, '0'));
                     break;
             }
-            return binary;
+            return builder.ToString();
+        }
+
+        public string ToMipsString()
+        {
+            StringBuilder builder = new StringBuilder();
+            switch (this.Type)
+            {
+                case FormatType.Register:
+                    builder.Append(this.Funct.ToString("g"));
+                    builder.Append(", $");
+                    builder.Append(this.Rd.ToString("g"));
+                    builder.Append(", $");
+                    builder.Append(this.Rs.ToString("g"));
+                    builder.Append(", $");
+                    builder.Append(this.Rt.ToString("g"));
+                    // TODO: Handle Shamt
+                    break;
+                case FormatType.Immediate:
+                    builder.Append(this.Opcode.ToString("g"));
+                    builder.Append(", $");
+                    builder.Append(this.Rt.ToString("g"));
+                    if (this.Opcode == Opcode.lw
+                        || this.Opcode == Opcode.sw)
+                    {
+                        builder.Append(" ");
+                        builder.Append(this.Immediate);
+                        builder.Append("($");
+                        builder.Append(this.Rs.ToString("g"));
+                        builder.Append(")");
+                        break;
+                    }
+                    builder.Append(", $");
+                    builder.Append(this.Rs.ToString("g"));
+                    builder.Append(", ");
+                    builder.Append(this.Immediate);
+                    break;
+                case FormatType.Jump:
+                    builder.Append(this.Opcode.ToString("g"));
+                    builder.Append(" ");
+                    builder.Append(this.WordAddress);
+                    break;
+            }
+            builder.Append("\n");
+            return builder.ToString();
         }
     }
 }
