@@ -57,25 +57,13 @@ namespace MIPS.Simulator
                         uint.TryParse(input[1], out address);
                         if (input.Length >= 3)
                             uint.TryParse(input[2], out length4Bytes);
-                        Console.WriteLine(InstructionToMipsString(vm, address, length4Bytes));
+                        Console.WriteLine(vm.GetMipsString(address, length4Bytes));
                         break;
                     case "a":  // 写汇编指令到内存，
                                // FileStream file = File.Open(input[1], FileMode.Open);
                         break;
                 }
             }
-        }
-        private static string InstructionToMipsString(Machine vm, uint address, uint length4Bytes)
-        {
-            StringBuilder builder = new StringBuilder();
-            uint i;
-            for (i = 0; i < length4Bytes; i++)
-            {
-                byte[] binary = vm.QueryRamAsBytes(address + i * 4);
-                Instruction instruction = new Instruction(binary);
-                builder.Append(instruction.ToMipsString());
-            }
-            return builder.ToString();
         }
     }
 }

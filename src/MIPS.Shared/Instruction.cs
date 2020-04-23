@@ -192,7 +192,7 @@ namespace MIPS.Shared
             {
                 case FormatType.Register:
                     builder.Append(this.Funct.ToString("g"));
-                    builder.Append(", $");
+                    builder.Append(" $");
                     builder.Append(this.Rd.ToString("g"));
                     builder.Append(", $");
                     builder.Append(this.Rs.ToString("g"));
@@ -202,12 +202,12 @@ namespace MIPS.Shared
                     break;
                 case FormatType.Immediate:
                     builder.Append(this.Opcode.ToString("g"));
-                    builder.Append(", $");
+                    builder.Append(" $");
                     builder.Append(this.Rt.ToString("g"));
                     if (this.Opcode == Opcode.lw
                         || this.Opcode == Opcode.sw)
                     {
-                        builder.Append(" ");
+                        builder.Append(", ");
                         builder.Append(this.Immediate);
                         builder.Append("($");
                         builder.Append(this.Rs.ToString("g"));

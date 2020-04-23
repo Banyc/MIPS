@@ -61,6 +61,19 @@ namespace MIPS.Simulator.VirtualMachine
             return this.Register.ReadAsHex(reg, endian);
         }
 
+        public string GetMipsString(uint address, uint length4Bytes)
+        {
+            StringBuilder builder = new StringBuilder();
+            uint i;
+            for (i = 0; i < length4Bytes; i++)
+            {
+                byte[] binary = this.QueryRamAsBytes(address + i * 4);
+                Instruction instruction = new Instruction(binary);
+                builder.Append(instruction.ToMipsString());
+            }
+            return builder.ToString();
+        }
+
         // the main loop happens here
         private void LoopContainer()
         {

@@ -33,7 +33,7 @@ namespace MIPS.Interpreter
                     return;
                 }
                 string input = File.ReadAllText(mipsFile);
-                string binary = mips.MipsToBinaryMethod(input, false);
+                string binary = mips.GetBinaryString(input, false);
                 File.WriteAllText(binPath, binary);
                 Console.WriteLine("Done");
                 return;
@@ -48,7 +48,7 @@ namespace MIPS.Interpreter
             {
                 Console.Write("> ");
                 string input = Console.ReadLine();
-                string binary = mips.MipsToBinaryMethod(input, true);
+                string binary = mips.GetBinaryString(input, true);
                 Console.WriteLine(binary);
             }
 

@@ -75,16 +75,9 @@ namespace MIPS.Interpreter.Interpreter
             return count;
         }
         
-        public string MipsToBinaryMethod(string input, bool isWithNewLines) {
-            ProgramInfo prog = ParseMips(input);
-            StringBuilder binary = new StringBuilder();
-            foreach (var stat in prog.Statements)
-            {
-                binary.Append(stat.Instruction.ToBinaryString());
-                if (isWithNewLines)
-                    binary.Append("\n");
-            }
-            return binary.ToString();
+        public string GetBinaryString(string mipsCode, bool isWithNewLines) {
+            ProgramInfo prog = ParseMips(mipsCode);
+            return prog.ToBinaryString(isWithNewLines);
         }
     }
 }
