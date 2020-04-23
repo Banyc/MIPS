@@ -1,30 +1,23 @@
 using System;
+using System.Text;
 
 namespace MIPS_simulator.VirtualMachine
 {
     public class Machine
     {
-        private bool _isDebug = false;
+        private bool _isDebug = false;  // step by step debug
         public uint Pc = 0;
+        public bool IsHalt = false;  // program has exited
 
         public CodeReader Code;
-        public IStorage<RegisterType> Register;
-        public IStorage<uint> Ram;
+        public RegisterStorage Register;
+        public RamStorage Ram;
 
         public Machine(string binary)
         {
             Reset(binary);
         }
 
-        // the main loop happens here
-        private void LoopContainer()
-        {
-            RunNextInstruction();
-            while (!_isDebug)
-            {
-                RunNextInstruction();
-            }
-        }
         // start from the beginning
         public void Run()
         {
@@ -46,9 +39,35 @@ namespace MIPS_simulator.VirtualMachine
         // set the new binary
         public void Reset(string binary)
         {
+            this.IsHalt = false;
             this.Code = new CodeReader(binary);
             this.Register = new RegisterStorage();
             this.Ram = new RamStorage();
+        }
+        // query Ram
+        public string QueryRamAsHex(uint address, uint length4Bytes = 1, Endian endian = Endian.LittleEndian)
+        {
+            return this.Ram.ReadAsHex(address, length4Bytes, endian);
+        }
+
+        public byte[] QueryRamAsBytes(uint address)
+        {
+            return this.Ram.Read(address);
+        }
+
+        public string QueryRegisterAsHex(RegisterType reg, Endian endian = Endian.LittleEndian)
+        {
+            return this.Register.ReadAsHex(reg, endian);
+        }
+
+        // the main loop happens here
+        private void LoopContainer()
+        {
+            RunNextInstruction();
+            while (!_isDebug)
+            {
+                RunNextInstruction();
+            }
         }
         // interpret the next instruction
         private void RunNextInstruction()
@@ -57,6 +76,7 @@ namespace MIPS_simulator.VirtualMachine
             string code = this.Code.GetCodeString(this.Pc);
             if (code == null)
             {
+                this.IsHalt = true;
                 _isDebug = true;  // hit EOF. Stop running
                 return;
             }

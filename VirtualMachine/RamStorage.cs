@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MIPS_simulator.VirtualMachine
 {
@@ -46,6 +47,33 @@ namespace MIPS_simulator.VirtualMachine
         {
             byte[] regValue = Read(address);
             return BitConverter.ToUInt32(regValue);
+        }
+        public string ReadAsHex(uint address, uint length4Bytes = 1, Endian endian = Endian.LittleEndian)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            int remaining = (int)length4Bytes;
+            uint addressSoFar = address;
+            while (remaining > 0)
+            {
+                strBuilder.Append(ReadAsHex(addressSoFar, endian));
+                strBuilder.Append(" ");
+                remaining -= 1;
+            }
+            return strBuilder.ToString();
+        }
+
+        public string ReadAsHex(uint address, Endian endian = Endian.LittleEndian)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            byte[] value = this.Read(address);
+            int i;
+            for (i = 0; i < 4; i++)
+            {
+                int index = endian == Endian.BigEndian? i : 3 - i;
+                string binary = Convert.ToString(value[index], 16).PadLeft(2, '0');
+                strBuilder.Append(binary);
+            }
+            return strBuilder.ToString();
         }
     }
 }

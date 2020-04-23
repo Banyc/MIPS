@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace MIPS_simulator.VirtualMachine
 {
@@ -49,6 +50,20 @@ namespace MIPS_simulator.VirtualMachine
         {
             byte[] regValue = Read(reg);
             return BitConverter.ToUInt32(regValue);
+        }
+
+        public string ReadAsHex(RegisterType reg, Endian endian = Endian.LittleEndian)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            byte[] value = this.Read(reg);
+            int i;
+            for (i = 0; i < 4; i++)
+            {
+                int index = endian == Endian.BigEndian? i : 3 - i;
+                string binary = Convert.ToString(value[index], 16).PadLeft(2, '0');
+                strBuilder.Append(binary);
+            }
+            return strBuilder.ToString();
         }
     }
 }
