@@ -4,9 +4,11 @@ Generate lexer and parser.
 
 ## Generate code
 
+Set `pwd` to current folder first. Then run the following command.
+
 <!-- java -jar antlr-4.8-complete.jar -Dlanguage=CSharp -visitor Hello.g4  -->
 ```
-java -jar antlr-4.8-complete.jar -Dlanguage=CSharp -visitor -o MipsToBinary MipsToBinary/MipsAsm.g4
+java -jar antlr-4.8-complete.jar -Dlanguage=CSharp -visitor -o MipsToBinary MipsAsm/MipsAsm.g4
 ```
 
 ## Make customized visitor
