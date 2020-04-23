@@ -53,27 +53,35 @@ namespace MIPS_simulator.VirtualMachine
         // interpret the next instruction
         private void RunNextInstruction()
         {
+            #region instruction fetch
             string code = this.Code.GetCodeString(this.Pc);
             if (code == null)
             {
                 _isDebug = true;  // hit EOF. Stop running
                 return;
             }
+            // auto increment
+            this.Pc += 4;
+            #endregion
+
+            #region instruction decode
             Instruction instruction = new Instruction(code);
+            #endregion
+
+            #region execute (ALU) + (write/read) memory + write back (to register)
             // modify register and/or RAM
             ModifyMemory(instruction);
-            // direct jump
+            // direct jump (modify PC)
             if (instruction.Type == FormatType.Jump)
             {
                 this.Pc = (this.Pc & 0xf0000000) | (instruction.WordAddress << 2);  // *= 4
                 return;
             }
-            // auto increment
-            this.Pc += 4;
-            // jump to relative address
+            // jump to relative address (modify PC)
             PcRelativeJump(instruction);
+            #endregion
         }
-
+        // modify register and/or RAM
         private void ModifyMemory(Instruction instruction)
         {
             int tmpInt;
@@ -128,7 +136,7 @@ namespace MIPS_simulator.VirtualMachine
                     break;
                 case Opcode.jal:
                     // https://chortle.ccsu.edu/AssemblyTutorial/Chapter-26/ass26_4.html
-                    this.Register.Write(RegisterType.ra, this.Pc + 8);
+                    this.Register.Write(RegisterType.ra, this.Pc + 4);
                     break;
             }
         }
@@ -147,7 +155,6 @@ namespace MIPS_simulator.VirtualMachine
                         isJump = true;
                     break;
             }
-
             if (isJump)
                 this.Pc = Convert.ToUInt32((int)this.Pc + (instruction.Immediate << 2));
         }
