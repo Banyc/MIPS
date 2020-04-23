@@ -111,13 +111,14 @@ namespace MIPS_interpreter.Interpreter
         
         public Instruction(string binary)
         {
+            // Parsing binary code is based on Opcode
+            this.Opcode = (Opcode)Convert.ToUInt32(binary.Substring(0, 6), 2);
             if (this.Opcode == Opcode.RType)
                 this.Type = FormatType.Register;
             else if (this.Opcode == Opcode.j || this.Opcode == Opcode.jal)
                 this.Type = FormatType.Jump;
             else
                 this.Type = FormatType.Immediate;
-            this.Opcode = (Opcode)Convert.ToUInt32(binary.Substring(0, 6), 2);
             switch (this.Type)
             {
                 case FormatType.Register:
