@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using MIPS_simulator.VirtualMachine;
+using MIPS.Simulator.VirtualMachine;
 
-namespace MIPS_simulator
+namespace MIPS.Simulator
 {
     class Program
     {
@@ -27,7 +27,7 @@ namespace MIPS_simulator
                 string[] input = Console.ReadLine().Split();
                 switch (input[0])
                 {
-                    case "s":
+                    case "s":  // go to next step
                         vm.Step();
                         if (vm.IsHalt)
                             Console.WriteLine("Program Exited");

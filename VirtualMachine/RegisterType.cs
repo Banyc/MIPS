@@ -1,4 +1,4 @@
-namespace MIPS_simulator.VirtualMachine
+namespace MIPS.Simulator.VirtualMachine
 {
     public enum RegisterType
     {

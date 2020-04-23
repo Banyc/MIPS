@@ -1,4 +1,4 @@
-# MIPS_simulator
+# MIPS.Simulator
 
 A virtual machine that take binary string as input.
 

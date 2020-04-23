@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace MIPS_simulator.VirtualMachine
+namespace MIPS.Simulator.VirtualMachine
 {
     public class RegisterStorage : IStorage<RegisterType>
     {

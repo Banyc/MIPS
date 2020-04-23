@@ -1,6 +1,6 @@
 using System;
 
-namespace MIPS_simulator.VirtualMachine
+namespace MIPS.Simulator.VirtualMachine
 {
     public class CodeReader
     {

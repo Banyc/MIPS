@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MIPS_simulator.VirtualMachine
+namespace MIPS.Simulator.VirtualMachine
 {
     public class RamStorage : IStorage<uint>
     {
