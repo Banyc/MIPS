@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 
-namespace MIPS_interpreter.Interpreter
+namespace MIPS.Interpreter.Interpreter
 {
     public enum FormatType
     {

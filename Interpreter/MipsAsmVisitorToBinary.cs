@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 
-namespace MIPS_interpreter.Interpreter
+namespace MIPS.Interpreter.Interpreter
 {
     public class MipsAsmVisitorToBinary : MipsAsmBaseVisitor<object>
     {

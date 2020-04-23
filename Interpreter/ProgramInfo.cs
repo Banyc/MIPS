@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MIPS_interpreter.Interpreter
+namespace MIPS.Interpreter.Interpreter
 {
     public class ProgramInfo
     {

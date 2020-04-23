@@ -3,7 +3,7 @@ using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 
-namespace MIPS_interpreter.Interpreter
+namespace MIPS.Interpreter.Interpreter
 {
     public class MipsToBinary
     {

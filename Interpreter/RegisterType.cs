@@ -1,4 +1,4 @@
-namespace MIPS_interpreter.Interpreter
+namespace MIPS.Interpreter.Interpreter
 {
     public enum RegisterType
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using MIPS_interpreter.Interpreter;
+using MIPS.Interpreter.Interpreter;
 
-namespace MIPS_interpreter
+namespace MIPS.Interpreter
 {
     class Program
     {
@@ -41,7 +41,7 @@ namespace MIPS_interpreter
 
             // interactive mode
             Console.WriteLine("Usage:");
-            Console.WriteLine("    ./MIPS_interpreter.exe -s [file of MIPS code] -o [path to save binary]");
+            Console.WriteLine("    ./MIPS.Interpreter.exe -s [file of MIPS code] -o [path to save binary]");
             Console.WriteLine("Please input a complete instruction for each line.");
 
             while (true)
