@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using MIPS.Shared;
 
 namespace MIPS.Interpreter.Interpreter
 {
