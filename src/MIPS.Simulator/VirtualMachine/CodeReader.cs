@@ -23,15 +23,13 @@ namespace MIPS.Simulator.VirtualMachine
         // disassemble
         public string GetMipsString(uint address, uint length4Bytes)
         {
-            StringBuilder builder = new StringBuilder();
+            MachineCodePack machineCodes = new MachineCodePack();
             uint i;
             for (i = 0; i < length4Bytes; i++)
             {
-                string binaryStr = this.GetOneMachineCode(address + i * 4).ToBinaryString();
-                Instruction instruction = new Instruction(binaryStr);
-                builder.Append(instruction.ToMipsString());
+                machineCodes.Add(this.GetOneMachineCode(address + i * 4));
             }
-            return builder.ToString();
+            return machineCodes.ToMipsString();
         }
 
         // query

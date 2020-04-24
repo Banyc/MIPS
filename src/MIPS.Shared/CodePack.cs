@@ -22,6 +22,11 @@ namespace MIPS.Shared
             }
         }
 
+        public void Add(Word32b code)
+        {
+            _codeList.Add(code);
+        }
+
         public string ToBinaryString(bool isWithNewLines)
         {
             StringBuilder binary = new StringBuilder();
