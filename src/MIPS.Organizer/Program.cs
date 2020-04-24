@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using MIPS.Simulator.VirtualMachine;
 using MIPS.Interpreter.Interpreter;
 using MIPS.Shared;
@@ -56,7 +57,12 @@ namespace MIPS.Organizer
                         break;
                     case "a":  // write MIPS codes to RAM
                                // `a`
-                        string mips = AskForMipsCode();
+                               // `a <path to asm>`
+                        string mips;
+                        if (input.Length > 1)
+                            mips = File.ReadAllText(input[1]);
+                        else
+                            mips = AskForMipsCode();
                         ProgramInfo prog = converter.ParseMips(mips);
                         MachineCodePack machineCode = prog.ToMachineCode();
                         vm.Reset(machineCode);
@@ -99,11 +105,13 @@ namespace MIPS.Organizer
             Console.WriteLine("case \"r\":  read register");
             Console.WriteLine("- `r t0`");
             Console.WriteLine("case \"d\":  read RAM");
+            Console.WriteLine("- `d <address> <length in 4 Bytes>`");
             Console.WriteLine("- `d <address> <length in 4 Bytes> <0:little-endian/1:big-endian>`");
             Console.WriteLine("case \"u\":  read RAM as instructions");
             Console.WriteLine("- `u <address> <length in 4 Bytes>`");
             Console.WriteLine("case \"a\":  write MIPS codes to RAM");
             Console.WriteLine("- `a`");
+            Console.WriteLine("- `a <path to asm>`");
         }
 
         private static string AskForMipsCode()
