@@ -7,8 +7,8 @@ namespace MIPS.Simulator.VirtualMachine
     public class Machine
     {
         private bool _isDebug = false;  // step by step debug
-        public uint Pc = 0;
-        public bool IsHalt = false;  // program has exited
+        public uint Pc;
+        public bool IsHalt;  // program has exited
 
         private MachineCodePack _machineCode;
         public CodeReader Codes;
@@ -164,7 +164,7 @@ namespace MIPS.Simulator.VirtualMachine
                     tmpInt = instruction.Immediate + tmpInt;
                     this.Register.Write(instruction.Rt, new Word32b(tmpInt));
                     break;
-                case Opcode.lw:
+                case Opcode.lw:  // offset unit := 1 byte
                     tmpUInt = this.Register.Read(instruction.Rs).ToUInt();
                     tmpBytes = this.Ram.Read((uint)((int)tmpUInt + instruction.Immediate)).ToBytes();
                     this.Register.Write(instruction.Rt, new Word32b(tmpBytes));
@@ -195,7 +195,7 @@ namespace MIPS.Simulator.VirtualMachine
                         isJump = true;
                     break;
             }
-            if (isJump)
+            if (isJump)  // jump unit := 1 word = 4 bytes = 32 bits
                 this.Pc = Convert.ToUInt32((int)this.Pc + (instruction.Immediate << 2));
         }
     }

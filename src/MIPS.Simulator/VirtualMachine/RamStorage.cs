@@ -7,7 +7,9 @@ namespace MIPS.Simulator.VirtualMachine
 {
     public class RamStorage : IStorage<uint>
     {
-        public Dictionary<uint, Word32b> Memory = new Dictionary<uint, Word32b>();
+        // data size for RAM := word = 32 bits (4 bytes)
+        // address unit := 4 bits (1 byte)
+        public Dictionary<uint, byte> Memory = new Dictionary<uint, byte>();
         public RamStorage()
         {
         }
@@ -41,16 +43,27 @@ namespace MIPS.Simulator.VirtualMachine
             return strBuilder.ToString();
         }
 
+        // address in byte, not word
         public void Write(uint address, Word32b newValue)
         {
-            this.Memory[address] = newValue;
+            uint i;
+            for (i = 0; i < 4; i++)
+            {
+                this.Memory[address + i] = newValue.ToBytes()[i];
+            }
         }
 
+        // address in byte, not word
         public Word32b Read(uint address)
         {
-            if (!this.Memory.ContainsKey(address))
-                return new Word32b(0);
-            return this.Memory[address];
+            byte[] read = new byte[4];
+            uint i;
+            for (i = 0; i < 4; i++)
+            {
+                if (this.Memory.ContainsKey(address + i))
+                    read[i] = this.Memory[address + i];
+            }
+            return new Word32b(read);
         }
     }
 }
