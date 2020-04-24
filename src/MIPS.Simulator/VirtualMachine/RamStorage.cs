@@ -22,6 +22,7 @@ namespace MIPS.Simulator.VirtualMachine
                 strBuilder.Append(ReadAsHex(addressSoFar, endian));
                 strBuilder.Append(" ");
                 remaining -= 1;
+                addressSoFar += 4;
             }
             return strBuilder.ToString();
         }
@@ -33,7 +34,7 @@ namespace MIPS.Simulator.VirtualMachine
             int i;
             for (i = 0; i < 4; i++)
             {
-                int index = endian == Endian.BigEndian? i : 3 - i;
+                int index = endian == Endian.BigEndian ? i : 3 - i;
                 string binary = Convert.ToString(value[index], 16).PadLeft(2, '0');
                 strBuilder.Append(binary);
             }

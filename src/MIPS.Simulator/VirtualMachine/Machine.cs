@@ -16,7 +16,10 @@ namespace MIPS.Simulator.VirtualMachine
         // code is stored in RAM, starting from 0
         public RamStorage Ram;
 
-        public Machine() { }
+        public Machine()
+        {
+            Reset(new MachineCodePack());
+        }
 
         public Machine(MachineCodePack machineCode)
         {
@@ -45,6 +48,8 @@ namespace MIPS.Simulator.VirtualMachine
         public void Reset(MachineCodePack machineCode)
         {
             _machineCode = machineCode;
+            this.Pc = 0;
+            this.IsHalt = false;
             this.Register = new RegisterStorage();
             this.Ram = new RamStorage();
             this.Codes = new CodeReader(this.Ram, machineCode);

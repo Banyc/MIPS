@@ -9,7 +9,7 @@ namespace MIPS.Shared
     {
         public List<Statement> Statements = new List<Statement>();
 
-        public MachineCodePack ToCodePack()
+        public MachineCodePack ToMachineCode()
         {
             List<Word32b> code = new List<Word32b>();
             foreach (var stat in this.Statements)

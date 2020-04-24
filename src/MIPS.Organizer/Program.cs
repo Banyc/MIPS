@@ -13,7 +13,7 @@ namespace MIPS.Organizer
             MIPS.Simulator.VirtualMachine.Machine vm = new Simulator.VirtualMachine.Machine();
             MIPS.Interpreter.Interpreter.MipsToBinary converter = new MIPS.Interpreter.Interpreter.MipsToBinary();
 
-            ProgramInfo prog = new ProgramInfo();
+            Prologue();
         
             // interactive
             while (true)
@@ -29,14 +29,23 @@ namespace MIPS.Organizer
                     case "s":  // go to next step
                         if (vm.IsHalt)
                             break;
-                        Console.WriteLine($"{(new Instruction(vm.QueryMachineCode(vm.Pc).ToBinaryString())).ToMipsString()}");  // print the executing instruction
+                        Console.WriteLine("-----");
+                        // print the executing instruction
+                        if (vm.Pc > 8)
+                            Console.Write($"{(vm.Pc / 4 - 1).ToString().PadLeft(2, ' ')}    {vm.GetMipsString(vm.Pc - 8, 1)}");
+                        if (vm.Pc > 4)
+                            Console.Write($"{(vm.Pc / 4 - 0).ToString().PadLeft(2, ' ')}    {vm.GetMipsString(vm.Pc - 4, 1)}");
+                        Console.Write($"{(vm.Pc / 4 + 1).ToString().PadLeft(2, ' ')}    {vm.GetMipsString(vm.Pc, 1)}");
+                        // go to next step
                         vm.Step();
+                        // print the next instruction
                         if (vm.IsHalt)
                             Console.WriteLine("Program Exited");
                         else
                         {
-                            Console.WriteLine($"PC: {vm.Pc} (At #{vm.Pc / 4} instruction)");
-                            Console.WriteLine($"{(new Instruction(vm.QueryMachineCode(vm.Pc).ToBinaryString())).ToMipsString()}");  // print the next instruction
+                            Console.Write($"{(vm.Pc / 4 + 1).ToString().PadLeft(2, ' ')} -> {vm.GetMipsString(vm.Pc, 1)}");  // print the next instruction
+                            Console.Write($"{(vm.Pc / 4 + 2).ToString().PadLeft(2, ' ')}    {vm.GetMipsString(vm.Pc + 4, 1)}");
+                            Console.Write($"{(vm.Pc / 4 + 3).ToString().PadLeft(2, ' ')}    {vm.GetMipsString(vm.Pc + 8, 1)}");
                         }
                         break;
                     case "r":  // read register
@@ -44,7 +53,7 @@ namespace MIPS.Organizer
                         RegisterType reg = (RegisterType)Enum.Parse(typeof(RegisterType), input[1]);
                         if (input.Length >= 3)
                             bool.TryParse(input[2], out isBigEndian);
-                        Console.WriteLine(vm.QueryRegister(reg).ToBinaryString(isBigEndian ? Endian.BigEndian : Endian.LittleEndian));
+                        Console.WriteLine($"0x{vm.QueryRegister(reg).ToHexString(isBigEndian ? Endian.BigEndian : Endian.LittleEndian)}");
                         break;
                     case "d":  // read RAM
                                // `d <address> <length/4Bytes> <0:little-endian/1:big-endian>`
@@ -53,9 +62,9 @@ namespace MIPS.Organizer
                             uint.TryParse(input[2], out length4Bytes);
                         if (input.Length >= 4)
                             bool.TryParse(input[3], out isBigEndian);
-                        Console.WriteLine(vm.QueryRamAsHex(address, length4Bytes, isBigEndian ? Endian.BigEndian : Endian.LittleEndian));
+                        Console.WriteLine($"0x {vm.QueryRamAsHex(address, length4Bytes, isBigEndian ? Endian.BigEndian : Endian.LittleEndian)}");
                         break;
-                    case "u":  // 指令方式看内存，
+                    case "u":  // read RAM as instructions
                                // binarty -> MIPS asm
                                // `u <address> <length/4Bytes>`
                         uint.TryParse(input[1], out address);
@@ -64,16 +73,29 @@ namespace MIPS.Organizer
                         Console.WriteLine(vm.GetMipsString(address, length4Bytes));
                         
                         break;
-                    case "a":  // 写汇编指令到内存，
-                               // FileStream file = File.Open(input[1], FileMode.Open);
+                    case "a":  // write MIPS codes to RAM
+                               // `a`
                         string mips = AskForMipsCode();
-                        prog = converter.ParseMips(mips);
-                        MachineCodePack machineCode = prog.ToCodePack();
+                        ProgramInfo prog = converter.ParseMips(mips);
+                        MachineCodePack machineCode = prog.ToMachineCode();
                         vm.Reset(machineCode);
-                        Console.WriteLine("Done reading");
                         break;
                 }
             }
+        }
+
+        private static void Prologue()
+        {
+            Console.WriteLine("case \"s\":  go to next step");
+            Console.WriteLine("- `s`");
+            Console.WriteLine("case \"r\":  read register");
+            Console.WriteLine("- `r t0`");
+            Console.WriteLine("case \"d\":  read RAM");
+            Console.WriteLine("- `d <address> <length/4Bytes> <0:little-endian/1:big-endian>`");
+            Console.WriteLine("case \"u\":  read RAM as instructions");
+            Console.WriteLine("- `u <address> <length/4Bytes>`");
+            Console.WriteLine("case \"a\":  write MIPS codes to RAM");
+            Console.WriteLine("- `a`");
         }
 
         private static string AskForMipsCode()
@@ -90,6 +112,7 @@ namespace MIPS.Organizer
                 builder.Append(code);
                 builder.Append("\n");
             }
+            Console.WriteLine("Done reading");
             return builder.ToString();
         }
     }

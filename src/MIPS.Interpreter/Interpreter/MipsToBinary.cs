@@ -78,7 +78,7 @@ namespace MIPS.Interpreter.Interpreter
         
         public string GetBinaryString(string mipsCode, bool isWithNewLines) {
             ProgramInfo prog = ParseMips(mipsCode);
-            MachineCodePack codePack = prog.ToCodePack();
+            MachineCodePack codePack = prog.ToMachineCode();
             return codePack.ToBinaryString(isWithNewLines);
         }
     }
