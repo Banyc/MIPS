@@ -10,19 +10,23 @@ namespace MIPS.Simulator.VirtualMachine
         public uint Pc = 0;
         public bool IsHalt = false;  // program has exited
 
-        public CodeReader Code;
+        private MachineCodePack _machineCode;
+        public CodeReader Codes;
         public RegisterStorage Register;
+        // code is stored in RAM, starting from 0
         public RamStorage Ram;
 
-        public Machine(string binary)
+        public Machine() { }
+
+        public Machine(MachineCodePack machineCode)
         {
-            Reset(binary);
+            Reset(machineCode);
         }
 
         // start from the beginning
         public void Run()
         {
-            Reset(this.Code.Binary);
+            Reset(_machineCode);
             Continue();
         }
         // go to next step in debug mode
@@ -38,12 +42,12 @@ namespace MIPS.Simulator.VirtualMachine
             LoopContainer();
         }
         // set the new binary
-        public void Reset(string binary)
+        public void Reset(MachineCodePack machineCode)
         {
-            this.IsHalt = false;
-            this.Code = new CodeReader(binary);
+            _machineCode = machineCode;
             this.Register = new RegisterStorage();
             this.Ram = new RamStorage();
+            this.Codes = new CodeReader(this.Ram, machineCode);
         }
         // query Ram
         public string QueryRamAsHex(uint address, uint length4Bytes = 1, Endian endian = Endian.LittleEndian)
@@ -56,22 +60,20 @@ namespace MIPS.Simulator.VirtualMachine
             return this.Ram.Read(address);
         }
 
+        public Word32b QueryMachineCode(uint address)
+        {
+            return this.Codes.GetOneMachineCode(address);
+        }
+
         public Word32b QueryRegister(RegisterType reg)
         {
             return this.Register.Read(reg);
         }
 
+        // TODO: encapsulate
         public string GetMipsString(uint address, uint length4Bytes)
         {
-            StringBuilder builder = new StringBuilder();
-            uint i;
-            for (i = 0; i < length4Bytes; i++)
-            {
-                string binaryStr = this.QueryRamWord(address + i * 4).ToBinaryString();
-                Instruction instruction = new Instruction(binaryStr);
-                builder.Append(instruction.ToMipsString());
-            }
-            return builder.ToString();
+            return this.Codes.GetMipsString(address, length4Bytes);
         }
 
         // the main loop happens here
@@ -87,22 +89,21 @@ namespace MIPS.Simulator.VirtualMachine
         private void RunNextInstruction()
         {
             #region instruction fetch
-            string code = this.Code.GetCodeString(this.Pc);
-            if (code == null)
-            {
-                this.IsHalt = true;
-                _isDebug = true;  // hit EOF. Stop running
-                return;
-            }
+            Word32b code = this.Codes.GetOneMachineCode(this.Pc);
             // auto increment
             this.Pc += 4;
             #endregion
 
             #region instruction decode
-            Instruction instruction = new Instruction(code);
+            Instruction instruction = new Instruction(code.ToBinaryString());
             #endregion
 
             #region execute (ALU) + (write/read) memory + write back (to register)
+            if (instruction.Type == FormatType.Halt || instruction.Opcode == Opcode.halt)
+            {
+                this.IsHalt = true;
+                return;
+            }
             // modify register and/or RAM
             ModifyMemory(instruction);
             // direct jump (modify PC)

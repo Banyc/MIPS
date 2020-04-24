@@ -16,6 +16,7 @@ namespace MIPS.Shared
     }
 
     // the class store a word of 32 bits (4 bytes)
+    // A word := one machine code
     // this class responsible for any type convertion in a word
     public class Word32b
     {
@@ -95,6 +96,12 @@ namespace MIPS.Shared
                 strBuilder.Append(binary);
             }
             return strBuilder.ToString();
+        }
+
+        public string ToMipsString()
+        {
+            Instruction instruction = new Instruction(ToBinaryString());
+            return instruction.ToMipsString();
         }
 
         public int ToInt()

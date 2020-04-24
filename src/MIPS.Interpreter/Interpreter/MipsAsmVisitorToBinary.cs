@@ -159,7 +159,10 @@ namespace MIPS.Interpreter.Interpreter
 
         public override object VisitOp_halt([NotNull] MipsAsmParser.Op_haltContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Type = FormatType.Halt;
+            obj.Opcode = Opcode.halt;
+            return obj;
         }
 
         public override object VisitOp_j([NotNull] MipsAsmParser.Op_jContext context)

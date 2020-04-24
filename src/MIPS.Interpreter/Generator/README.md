@@ -26,6 +26,8 @@ java -jar antlr-4.8-complete.jar -Dlanguage=CSharp -visitor -o MipsToBinary Mips
 
 - <http://www.mrc.uidaho.edu/mrc/people/jff/digital/MIPSir.html>
 
+- <http://www.cs.umd.edu/~meesh/cmsc411/mips-pipe/proj-fall11/mips-doc/node2.html>
+
 ### Types
 
 ![](img/2020-04-18-18-17-23.png)

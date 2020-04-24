@@ -1,20 +1,43 @@
 using System;
+using System.Text;
+using MIPS.Shared;
 
 namespace MIPS.Simulator.VirtualMachine
 {
+    // responsible for machine code query and disassembly based on an existing IStorage
     public class CodeReader
     {
-        public string Binary = "";
-        public CodeReader(string binary)
+        private IStorage<uint> _storage;
+        // write machine codes to storage
+        public CodeReader(IStorage<uint> storage, MachineCodePack machineCodes)
         {
-            this.Binary = binary;
+            _storage = storage;
+            uint addr = 0;
+            foreach (Word32b word in machineCodes)
+            {
+                this._storage.Write(addr, word);
+                addr += 4;
+            }
         }
 
-        public string GetCodeString(uint addr)
+        // disassemble
+        public string GetMipsString(uint address, uint length4Bytes)
         {
-            if (addr >= this.Binary.Length / 8)
-                return null;
-            return this.Binary.Substring((int)addr * 8, 32);
+            StringBuilder builder = new StringBuilder();
+            uint i;
+            for (i = 0; i < length4Bytes; i++)
+            {
+                string binaryStr = this.GetOneMachineCode(address + i * 4).ToBinaryString();
+                Instruction instruction = new Instruction(binaryStr);
+                builder.Append(instruction.ToMipsString());
+            }
+            return builder.ToString();
+        }
+
+        // query
+        public Word32b GetOneMachineCode(uint addr)
+        {
+            return this._storage.Read(addr);
         }
     }
 }

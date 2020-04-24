@@ -31,3 +31,4 @@ Go to the `Generator` folder
 - xor
 - move
 - bgt
+- halt

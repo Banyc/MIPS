@@ -3,11 +3,13 @@ using System.Text;
 
 namespace MIPS.Shared
 {
+    // this class only serves for AST (abstract syntax tree)
+    // the class does not take responsibility for disassembled MIPS codes
     public class ProgramInfo
     {
         public List<Statement> Statements = new List<Statement>();
 
-        public CodePack ToCodePack()
+        public MachineCodePack ToCodePack()
         {
             List<Word32b> code = new List<Word32b>();
             foreach (var stat in this.Statements)
@@ -16,7 +18,7 @@ namespace MIPS.Shared
                 Word32b word = new Word32b(binary, CodingSystem.Binary);
                 code.Add(word);
             }
-            CodePack codePack = new CodePack(code);
+            MachineCodePack codePack = new MachineCodePack(code);
             return codePack;
         }
     }

@@ -73,6 +73,7 @@ namespace MIPS.Shared
         xori = 0b001110,
         j = 0b000010,
         jal = 0b000011,
+        halt = 0b111111
     }
 
     public class Instruction
@@ -122,6 +123,8 @@ namespace MIPS.Shared
                 this.Type = FormatType.Register;
             else if (this.Opcode == Opcode.j || this.Opcode == Opcode.jal)
                 this.Type = FormatType.Jump;
+            else if (this.Opcode == Opcode.halt)
+                this.Type = FormatType.Halt;
             else
                 this.Type = FormatType.Immediate;
             switch (this.Type)
@@ -153,6 +156,9 @@ namespace MIPS.Shared
             string tmp;
             switch (this.Type)
             {
+                case FormatType.Halt:
+                    builder.Append(Convert.ToString((uint)this.WordAddress, 2).PadLeft(26, '0'));
+                    break;
                 case FormatType.Register:
                     builder.Append(Convert.ToString((uint)this.Rs, 2).PadLeft(5, '0'));
                     builder.Append(Convert.ToString((uint)this.Rt, 2).PadLeft(5, '0'));
@@ -180,6 +186,9 @@ namespace MIPS.Shared
             StringBuilder builder = new StringBuilder();
             switch (this.Type)
             {
+                case FormatType.Halt:
+                    builder.Append(this.Opcode.ToString("g"));
+                    break;
                 case FormatType.Register:
                     builder.Append(this.Funct.ToString("g"));
                     builder.Append(" $");

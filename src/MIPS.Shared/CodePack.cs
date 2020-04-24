@@ -4,29 +4,28 @@ using System.Text;
 
 namespace MIPS.Shared
 {
-    // Manage a list of words as code
+    // Manage a list of words as machine code (not MIPS assembly)
     // this class responsible for any type or format convertion within the code
-    public class CodePack : IEnumerator
+    public class MachineCodePack : IEnumerable<Word32b>
     {
-        private List<Word32b> _code = new List<Word32b>();
-        private int _position = 0;
+        private List<Word32b> _codeList = new List<Word32b>();
 
-        public object Current => _code[_position];
+        public int Count => _codeList.Count;
 
-        public CodePack() {}
+        public MachineCodePack() {}
 
-        public CodePack(List<Word32b> code)
+        public MachineCodePack(List<Word32b> code)
         {
             foreach (var word in code)
             {
-                _code.Add(word);
+                _codeList.Add(word);
             }
         }
 
         public string ToBinaryString(bool isWithNewLines)
         {
             StringBuilder binary = new StringBuilder();
-            foreach (var word in this._code)
+            foreach (var word in this._codeList)
             {
                 binary.Append(word.ToBinaryString());
                 if (isWithNewLines)
@@ -38,7 +37,7 @@ namespace MIPS.Shared
         public string ToHexString(bool isWithSpaces)
         {
             StringBuilder binary = new StringBuilder();
-            foreach (var word in this._code)
+            foreach (var word in this._codeList)
             {
                 binary.Append(word.ToHexString());
                 if (isWithSpaces)
@@ -50,27 +49,21 @@ namespace MIPS.Shared
         public string ToMipsString()
         {
             StringBuilder mips = new StringBuilder();
-            foreach (var word in this._code)
+            foreach (var word in this._codeList)
             {
-                string wordBinStr = word.ToBinaryString();
-                Instruction instruction = new Instruction(wordBinStr);
-                mips.Append(instruction.ToMipsString());
+                mips.Append(word.ToMipsString());
             }
             return mips.ToString();
         }
 
-        // TODO: review
-        public bool MoveNext()
+        public IEnumerator<Word32b> GetEnumerator()
         {
-            if (_position >= _code.Count)
-                return false;
-            _position++;
-            return true;
+            return _codeList.GetEnumerator();
         }
 
-        public void Reset()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            _position = 0;
+            return _codeList.GetEnumerator();
         }
     }
 }

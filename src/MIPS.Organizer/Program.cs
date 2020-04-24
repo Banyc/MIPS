@@ -10,27 +10,11 @@ namespace MIPS.Organizer
     {
         static void Main(string[] args)
         {
-            MIPS.Simulator.VirtualMachine.Machine vm = new Simulator.VirtualMachine.Machine("");
+            MIPS.Simulator.VirtualMachine.Machine vm = new Simulator.VirtualMachine.Machine();
             MIPS.Interpreter.Interpreter.MipsToBinary converter = new MIPS.Interpreter.Interpreter.MipsToBinary();
 
-            StringBuilder builder = new StringBuilder();
-            Console.WriteLine("Input MIPS code here. End with continuous enters");
-            Console.Write("> ");
-
-            while (true)
-            {
-                string code = Console.ReadLine();
-                if (code == "")
-                    break;
-                builder.Append(code);
-                builder.Append("\n");
-            }
-
-            // string binary = converter.GetBinaryString(builder.ToString(), false);
-            ProgramInfo prog = converter.ParseMips(builder.ToString());
-            string binary = prog.ToBinaryString(false);
-            vm.Reset(binary);
-
+            ProgramInfo prog = new ProgramInfo();
+        
             // interactive
             while (true)
             {
@@ -45,20 +29,22 @@ namespace MIPS.Organizer
                     case "s":  // go to next step
                         if (vm.IsHalt)
                             break;
-                        Console.WriteLine($"{prog.Statements[(int)vm.Pc / 4].Instruction.ToMipsString()}");  // print the executing instruction
+                        Console.WriteLine($"{(new Instruction(vm.QueryMachineCode(vm.Pc).ToBinaryString())).ToMipsString()}");  // print the executing instruction
                         vm.Step();
                         if (vm.IsHalt)
                             Console.WriteLine("Program Exited");
                         else
+                        {
                             Console.WriteLine($"PC: {vm.Pc} (At #{vm.Pc / 4} instruction)");
-                            Console.WriteLine($"{prog.Statements[(int)vm.Pc / 4].Instruction.ToMipsString()}");  // print the next instruction
+                            Console.WriteLine($"{(new Instruction(vm.QueryMachineCode(vm.Pc).ToBinaryString())).ToMipsString()}");  // print the next instruction
+                        }
                         break;
                     case "r":  // read register
                                // `r t0`
                         RegisterType reg = (RegisterType)Enum.Parse(typeof(RegisterType), input[1]);
                         if (input.Length >= 3)
                             bool.TryParse(input[2], out isBigEndian);
-                        Console.WriteLine(vm.QueryRegisterAsHex(reg, isBigEndian ? Endian.BigEndian : Endian.LittleEndian));
+                        Console.WriteLine(vm.QueryRegister(reg).ToBinaryString(isBigEndian ? Endian.BigEndian : Endian.LittleEndian));
                         break;
                     case "d":  // read RAM
                                // `d <address> <length/4Bytes> <0:little-endian/1:big-endian>`
@@ -80,9 +66,31 @@ namespace MIPS.Organizer
                         break;
                     case "a":  // 写汇编指令到内存，
                                // FileStream file = File.Open(input[1], FileMode.Open);
+                        string mips = AskForMipsCode();
+                        prog = converter.ParseMips(mips);
+                        MachineCodePack machineCode = prog.ToCodePack();
+                        vm.Reset(machineCode);
+                        Console.WriteLine("Done reading");
                         break;
                 }
             }
+        }
+
+        private static string AskForMipsCode()
+        {
+            StringBuilder builder = new StringBuilder();
+            Console.WriteLine("Input MIPS code here. End with continuous enters");
+            Console.Write("> ");
+
+            while (true)
+            {
+                string code = Console.ReadLine();
+                if (code == "")
+                    break;
+                builder.Append(code);
+                builder.Append("\n");
+            }
+            return builder.ToString();
         }
     }
 }
