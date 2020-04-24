@@ -7,16 +7,17 @@ namespace MIPS.Shared
     {
         public List<Statement> Statements = new List<Statement>();
 
-        public string ToBinaryString(bool isWithNewLines)
+        public CodePack ToCodePack()
         {
-            StringBuilder binary = new StringBuilder();
+            List<Word32b> code = new List<Word32b>();
             foreach (var stat in this.Statements)
             {
-                binary.Append(stat.Instruction.ToBinaryString());
-                if (isWithNewLines)
-                    binary.Append("\n");
+                string binary = stat.Instruction.ToBinaryString();
+                Word32b word = new Word32b(binary, CodingSystem.Binary);
+                code.Add(word);
             }
-            return binary.ToString();
+            CodePack codePack = new CodePack(code);
+            return codePack;
         }
     }
 }

@@ -51,14 +51,14 @@ namespace MIPS.Simulator.VirtualMachine
             return this.Ram.ReadAsHex(address, length4Bytes, endian);
         }
 
-        public byte[] QueryRamAsBytes(uint address)
+        public Word32b QueryRamWord(uint address)
         {
             return this.Ram.Read(address);
         }
 
-        public string QueryRegisterAsHex(RegisterType reg, Endian endian = Endian.LittleEndian)
+        public Word32b QueryRegister(RegisterType reg)
         {
-            return this.Register.ReadAsHex(reg, endian);
+            return this.Register.Read(reg);
         }
 
         public string GetMipsString(uint address, uint length4Bytes)
@@ -67,8 +67,8 @@ namespace MIPS.Simulator.VirtualMachine
             uint i;
             for (i = 0; i < length4Bytes; i++)
             {
-                byte[] binary = this.QueryRamAsBytes(address + i * 4);
-                Instruction instruction = new Instruction(binary);
+                string binaryStr = this.QueryRamWord(address + i * 4).ToBinaryString();
+                Instruction instruction = new Instruction(binaryStr);
                 builder.Append(instruction.ToMipsString());
             }
             return builder.ToString();
@@ -127,50 +127,50 @@ namespace MIPS.Simulator.VirtualMachine
                     switch (instruction.Funct)
                     {
                         case Funct.add:
-                            tmpInt = this.Register.ReadAsInt(instruction.Rs)
-                                + this.Register.ReadAsInt(instruction.Rt);
-                            this.Register.Write(instruction.Rd, tmpInt);
+                            tmpInt = this.Register.Read(instruction.Rs).ToInt()
+                                + this.Register.Read(instruction.Rt).ToInt();
+                            this.Register.Write(instruction.Rd, new Word32b(tmpInt));
                             break;
                         case Funct.addu:
-                            tmpUInt = this.Register.ReadAsUInt(instruction.Rs)
-                                + this.Register.ReadAsUInt(instruction.Rt);
-                            this.Register.Write(instruction.Rd, tmpUInt);
+                            tmpUInt = this.Register.Read(instruction.Rs).ToUInt()
+                                + this.Register.Read(instruction.Rt).ToUInt();
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
                             break;
                         case Funct.and:
-                            tmpUInt = this.Register.ReadAsUInt(instruction.Rs)
-                                & this.Register.ReadAsUInt(instruction.Rt);
-                            this.Register.Write(instruction.Rd, tmpUInt);
+                            tmpUInt = this.Register.Read(instruction.Rs).ToUInt()
+                                & this.Register.Read(instruction.Rt).ToUInt();
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
                             break;
                         case Funct.sub:
-                            tmpInt = this.Register.ReadAsInt(instruction.Rs)
-                                - this.Register.ReadAsInt(instruction.Rt);
-                            this.Register.Write(instruction.Rd, tmpInt);
+                            tmpInt = this.Register.Read(instruction.Rs).ToInt()
+                                - this.Register.Read(instruction.Rt).ToInt();
+                            this.Register.Write(instruction.Rd, new Word32b(tmpInt));
                             break;
                         case Funct.subu:
-                            tmpUInt = this.Register.ReadAsUInt(instruction.Rs)
-                                - this.Register.ReadAsUInt(instruction.Rt);
-                            this.Register.Write(instruction.Rd, tmpUInt);
+                            tmpUInt = this.Register.Read(instruction.Rs).ToUInt()
+                                - this.Register.Read(instruction.Rt).ToUInt();
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
                             break;
                     }
                     break;
                 case Opcode.addi:
-                    tmpInt = this.Register.ReadAsInt(instruction.Rs);
+                    tmpInt = this.Register.Read(instruction.Rs).ToInt();
                     tmpInt = instruction.Immediate + tmpInt;
-                    this.Register.Write(instruction.Rt, tmpInt);
+                    this.Register.Write(instruction.Rt, new Word32b(tmpInt));
                     break;
                 case Opcode.lw:
-                    tmpUInt = this.Register.ReadAsUInt(instruction.Rs);
-                    tmpBytes = this.Ram.Read((uint)((int)tmpUInt + instruction.Immediate));
-                    this.Register.Write(instruction.Rt, tmpBytes);
+                    tmpUInt = this.Register.Read(instruction.Rs).ToUInt();
+                    tmpBytes = this.Ram.Read((uint)((int)tmpUInt + instruction.Immediate)).ToBytes();
+                    this.Register.Write(instruction.Rt, new Word32b(tmpBytes));
                     break;
                 case Opcode.sw:
-                    tmpBytes = this.Register.Read(instruction.Rt);
-                    tmpUInt = this.Register.ReadAsUInt(instruction.Rs);
-                    this.Ram.Write((uint)((int)tmpUInt + instruction.Immediate), tmpBytes);
+                    tmpBytes = this.Register.Read(instruction.Rt).ToBytes();
+                    tmpUInt = this.Register.Read(instruction.Rs).ToUInt();
+                    this.Ram.Write((uint)((int)tmpUInt + instruction.Immediate), new Word32b(tmpBytes));
                     break;
                 case Opcode.jal:
                     // https://chortle.ccsu.edu/AssemblyTutorial/Chapter-26/ass26_4.html
-                    this.Register.Write(RegisterType.ra, this.Pc + 4);
+                    this.Register.Write(RegisterType.ra, new Word32b(this.Pc + 4));
                     break;
             }
         }
@@ -181,11 +181,11 @@ namespace MIPS.Simulator.VirtualMachine
             switch (instruction.Opcode)
             {
                 case Opcode.beq:
-                    if (this.Register.ReadAsInt(instruction.Rs) == this.Register.ReadAsInt(instruction.Rt))
+                    if (this.Register.Read(instruction.Rs).ToInt() == this.Register.Read(instruction.Rt).ToInt())
                         isJump = true;
                     break;
                 case Opcode.bne:
-                    if (this.Register.ReadAsInt(instruction.Rs) != this.Register.ReadAsInt(instruction.Rt))
+                    if (this.Register.Read(instruction.Rs).ToInt() != this.Register.Read(instruction.Rt).ToInt())
                         isJump = true;
                     break;
             }

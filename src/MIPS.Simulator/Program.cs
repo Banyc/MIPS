@@ -40,7 +40,7 @@ namespace MIPS.Simulator
                         RegisterType reg = (RegisterType)Enum.Parse(typeof(RegisterType), input[1]);
                         if (input.Length >= 3)
                             bool.TryParse(input[2], out isBigEndian);
-                        Console.WriteLine(vm.QueryRegisterAsHex(reg, isBigEndian ? Endian.BigEndian : Endian.LittleEndian));
+                        Console.WriteLine(vm.QueryRegister(reg).ToBinaryString(isBigEndian ? Endian.BigEndian : Endian.LittleEndian));
                         break;
                     case "d":  // read RAM
                                // `d <address> <length/4Bytes> <0:little-endian/1:big-endian>`

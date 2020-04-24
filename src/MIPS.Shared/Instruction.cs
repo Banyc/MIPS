@@ -109,17 +109,6 @@ namespace MIPS.Shared
         {
 
         }
-        public Instruction(byte[] binary)
-        {
-            StringBuilder builder = new StringBuilder();
-            int i;
-            for (i = 0; i < 4; i++)
-            {
-                string binaryStr = Convert.ToString(binary[i], 2).PadLeft(8, '0');
-                builder.Append(binaryStr);
-            }
-            Initialize(builder.ToString());
-        }
         public Instruction(string binary)
         {
             Initialize(binary);
@@ -185,6 +174,7 @@ namespace MIPS.Shared
             return builder.ToString();
         }
 
+        // result appended with "\n"
         public string ToMipsString()
         {
             StringBuilder builder = new StringBuilder();

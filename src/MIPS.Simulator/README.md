@@ -11,3 +11,17 @@ Files
     - Register
 
 ... should Sync to that in project MIPS_interpreter
+
+## Currently supported Instructions
+
+- add
+- addu
+- and
+- sub
+- subu
+- addi
+- lw
+- sw
+- jal
+- beq
+- bne
