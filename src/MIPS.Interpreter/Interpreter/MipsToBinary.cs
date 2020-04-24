@@ -6,6 +6,7 @@ using MIPS.Shared;
 
 namespace MIPS.Interpreter.Interpreter
 {
+    // main entry for the interpreter
     public class MipsToBinary
     {
         public ProgramInfo ParseMips(string input)

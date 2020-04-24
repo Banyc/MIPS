@@ -144,7 +144,12 @@ namespace MIPS.Interpreter.Interpreter
 
         public override object VisitOp_bgtz([NotNull] MipsAsmParser.Op_bgtzContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.bgtz;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = RegisterType.zero;
+            obj.TargetLabelIdentity = context.iden().GetText();
+            return obj;
         }
 
         public override object VisitOp_bne([NotNull] MipsAsmParser.Op_bneContext context)
@@ -183,32 +188,63 @@ namespace MIPS.Interpreter.Interpreter
 
         public override object VisitOp_jr([NotNull] MipsAsmParser.Op_jrContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.RType;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = RegisterType.zero;
+            obj.Rd = RegisterType.zero;
+            obj.Funct = Funct.jr;
+            return obj;
         }
 
         public override object VisitOp_lb([NotNull] MipsAsmParser.Op_lbContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.lb;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.signed_imm());
+            return obj;
         }
 
         public override object VisitOp_lbu([NotNull] MipsAsmParser.Op_lbuContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.lbu;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.signed_imm());
+            return obj;
         }
 
         public override object VisitOp_lh([NotNull] MipsAsmParser.Op_lhContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.lh;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.signed_imm());
+            return obj;
         }
 
         public override object VisitOp_lhu([NotNull] MipsAsmParser.Op_lhuContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.lhu;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.signed_imm());
+            return obj;
         }
 
         public override object VisitOp_lui([NotNull] MipsAsmParser.Op_luiContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.lui;
+            obj.Rs = RegisterType.zero;
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.usigned_imm());
+            return obj;
         }
 
         public override object VisitOp_lw([NotNull] MipsAsmParser.Op_lwContext context)
@@ -228,7 +264,12 @@ namespace MIPS.Interpreter.Interpreter
 
         public override object VisitOp_nor([NotNull] MipsAsmParser.Op_norContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
+            obj.Funct = Funct.nor;
+            return obj;
         }
 
         public override object VisitOp_nori([NotNull] MipsAsmParser.Op_noriContext context)
@@ -238,27 +279,53 @@ namespace MIPS.Interpreter.Interpreter
 
         public override object VisitOp_or([NotNull] MipsAsmParser.Op_orContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
+            obj.Funct = Funct.or;
+            return obj;
         }
 
         public override object VisitOp_ori([NotNull] MipsAsmParser.Op_oriContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.ori;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.usigned_imm());
+            return obj;
         }
 
         public override object VisitOp_sb([NotNull] MipsAsmParser.Op_sbContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.sb;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.signed_imm());
+            return obj;
         }
 
         public override object VisitOp_sh([NotNull] MipsAsmParser.Op_shContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.sh;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.signed_imm());
+            return obj;
         }
 
         public override object VisitOp_sll([NotNull] MipsAsmParser.Op_sllContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Rs = RegisterType.zero;
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
+            obj.Shamt = (uint)Visit(context.usigned_imm());
+            obj.Funct = Funct.sll;
+            return obj;
         }
 
         public override object VisitOp_slt([NotNull] MipsAsmParser.Op_sltContext context)
@@ -283,17 +350,34 @@ namespace MIPS.Interpreter.Interpreter
 
         public override object VisitOp_slti([NotNull] MipsAsmParser.Op_sltiContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Opcode = Opcode.slti;
+            obj.Rs = (RegisterType)Visit(context.rs);
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Immediate = (int)Visit(context.signed_imm());
+            return obj;
         }
 
         public override object VisitOp_sra([NotNull] MipsAsmParser.Op_sraContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Rs = RegisterType.zero;
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
+            obj.Shamt = (uint)Visit(context.usigned_imm());
+            obj.Funct = Funct.sra;
+            return obj;
         }
 
         public override object VisitOp_srl([NotNull] MipsAsmParser.Op_srlContext context)
         {
-            throw new System.NotImplementedException();
+            Instruction obj = new Instruction();
+            obj.Rs = RegisterType.zero;
+            obj.Rt = (RegisterType)Visit(context.rt);
+            obj.Rd = (RegisterType)Visit(context.rd);
+            obj.Shamt = (uint)Visit(context.usigned_imm());
+            obj.Funct = Funct.srl;
+            return obj;
         }
 
         public override object VisitOp_sub([NotNull] MipsAsmParser.Op_subContext context)
