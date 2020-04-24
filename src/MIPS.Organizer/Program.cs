@@ -19,7 +19,7 @@ namespace MIPS.Organizer
             // interactive
             while (true)
             {
-                bool isBigEndian = false;
+                bool isLittleEndian = true;
                 uint address;
                 uint length4Bytes = 1;
 
@@ -34,8 +34,8 @@ namespace MIPS.Organizer
                                // `r t0`
                         RegisterType reg = (RegisterType)Enum.Parse(typeof(RegisterType), input[1]);
                         if (input.Length >= 3)
-                            bool.TryParse(input[2], out isBigEndian);
-                        Console.WriteLine($"0x{vm.QueryRegister(reg).ToHexString(isBigEndian ? Endian.BigEndian : Endian.LittleEndian)}");
+                            bool.TryParse(input[2], out isLittleEndian);
+                        Console.WriteLine($"0x{vm.QueryRegister(reg).ToHexString(isLittleEndian ? Endian.LittleEndian : Endian.BigEndian)}");
                         break;
                     case "d":  // read RAM
                                // `d <address> <length/4Bytes> <0:little-endian/1:big-endian>`
@@ -43,8 +43,8 @@ namespace MIPS.Organizer
                         if (input.Length >= 3)
                             uint.TryParse(input[2], out length4Bytes);
                         if (input.Length >= 4)
-                            bool.TryParse(input[3], out isBigEndian);
-                        Console.WriteLine($"0x {vm.QueryRamAsHex(address, length4Bytes, isBigEndian ? Endian.BigEndian : Endian.LittleEndian)}");
+                            bool.TryParse(input[3], out isLittleEndian);
+                        Console.WriteLine($"0x {vm.QueryRamAsHex(address, length4Bytes, isLittleEndian ? Endian.LittleEndian : Endian.BigEndian)}");
                         break;
                     case "u":  // read RAM as instructions
                                // binarty -> MIPS asm
@@ -106,7 +106,7 @@ namespace MIPS.Organizer
             Console.WriteLine("- `r t0`");
             Console.WriteLine("case \"d\":  read RAM");
             Console.WriteLine("- `d <address> <length in 4 Bytes>`");
-            Console.WriteLine("- `d <address> <length in 4 Bytes> <0:little-endian/1:big-endian>`");
+            Console.WriteLine("- `d <address> <length in 4 Bytes> <True:little-endian/False:big-endian>`");
             Console.WriteLine("case \"u\":  read RAM as instructions");
             Console.WriteLine("- `u <address> <length in 4 Bytes>`");
             Console.WriteLine("case \"a\":  write MIPS codes to RAM");
