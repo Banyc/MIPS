@@ -112,11 +112,8 @@ namespace MIPS.Simulator.VirtualMachine
             // modify register and/or RAM
             ModifyMemory(instruction);
             // direct jump (modify PC)
-            if (instruction.Type == FormatType.Jump)
-            {
-                this.Pc = (this.Pc & 0xf0000000) | (instruction.WordAddress << 2);  // *= 4
+            if (PcDirectJump(instruction))
                 return;
-            }
             // jump to relative address (modify PC)
             PcRelativeJump(instruction);
             #endregion
@@ -147,6 +144,55 @@ namespace MIPS.Simulator.VirtualMachine
                                 & this.Register.Read(instruction.Rt).ToUInt();
                             this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
                             break;
+                        case Funct.nor:
+                            tmpUInt = ~(this.Register.Read(instruction.Rs).ToUInt()
+                                | this.Register.Read(instruction.Rt).ToUInt());
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                            break;
+                        case Funct.or:
+                            tmpUInt = this.Register.Read(instruction.Rs).ToUInt()
+                                | this.Register.Read(instruction.Rt).ToUInt();
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                            break;
+                        // Unsigned left shift
+                        case Funct.sll:
+                            tmpUInt = this.Register.Read(instruction.Rt).ToUInt() << (int)instruction.Shamt;
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                            break;
+                        // // Unsigned left shift
+                        // case Funct.sllv:
+                        //     tmpUInt = this.Register.Read(instruction.Rt).ToUInt()
+                        //         // workaround : shift right operant has to be int
+                        //         << (int)this.Register.Read(instruction.Rs).ToUInt();
+                        //     this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                        //     break;
+                        case Funct.slt:
+                            if (this.Register.Read(instruction.Rs).ToInt()
+                                < this.Register.Read(instruction.Rt).ToInt())
+                                tmpUInt = 1;
+                            else
+                                tmpUInt = 0;
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                            break;
+                        case Funct.sltu:
+                            if (this.Register.Read(instruction.Rs).ToUInt()
+                                < this.Register.Read(instruction.Rt).ToUInt())
+                                tmpUInt = 1;
+                            else
+                                tmpUInt = 0;
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                            break;
+                        // // signed right shift
+                        // TODO: make shamt a full negative number if the fifth bit is 1
+                        // case Funct.sra:
+                        //     tmpUInt = this.Register.Read(instruction.Rt).ToUInt() >> (int)instruction.Shamt;
+                        //     this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                        //     break;
+                        // unsigned right shift
+                        case Funct.srl:
+                            tmpUInt = this.Register.Read(instruction.Rt).ToUInt() >> (int)instruction.Shamt;
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                            break;
                         case Funct.sub:
                             tmpInt = this.Register.Read(instruction.Rs).ToInt()
                                 - this.Register.Read(instruction.Rt).ToInt();
@@ -157,6 +203,11 @@ namespace MIPS.Simulator.VirtualMachine
                                 - this.Register.Read(instruction.Rt).ToUInt();
                             this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
                             break;
+                        case Funct.xor:
+                            tmpUInt = this.Register.Read(instruction.Rs).ToUInt()
+                                ^ this.Register.Read(instruction.Rt).ToUInt();
+                            this.Register.Write(instruction.Rd, new Word32b(tmpUInt));
+                            break;
                     }
                     break;
                 case Opcode.addi:
@@ -164,10 +215,32 @@ namespace MIPS.Simulator.VirtualMachine
                     tmpInt = instruction.Immediate + tmpInt;
                     this.Register.Write(instruction.Rt, new Word32b(tmpInt));
                     break;
+                case Opcode.addiu:
+                    tmpUInt = this.Register.Read(instruction.Rs).ToUInt();
+                    tmpUInt = (uint)instruction.Immediate + tmpUInt;
+                    this.Register.Write(instruction.Rt, new Word32b(tmpUInt));
+                    break;
+                case Opcode.andi:
+                    tmpInt = this.Register.Read(instruction.Rs).ToInt();
+                    tmpInt = instruction.Immediate & tmpInt;
+                    this.Register.Write(instruction.Rt, new Word32b(tmpInt));
+                    break;
                 case Opcode.lw:  // offset unit := 1 byte
                     tmpUInt = this.Register.Read(instruction.Rs).ToUInt();
                     tmpBytes = this.Ram.Read((uint)((int)tmpUInt + instruction.Immediate)).ToBytes();
                     this.Register.Write(instruction.Rt, new Word32b(tmpBytes));
+                    break;
+                case Opcode.ori:
+                    tmpInt = this.Register.Read(instruction.Rs).ToInt();
+                    tmpInt = instruction.Immediate | tmpInt;
+                    this.Register.Write(instruction.Rt, new Word32b(tmpInt));
+                    break;
+                case Opcode.slti:
+                    if (this.Register.Read(instruction.Rs).ToInt() < instruction.Immediate)
+                        tmpUInt = 1;
+                    else
+                        tmpUInt = 0;
+                    this.Register.Write(instruction.Rt, new Word32b(tmpUInt));
                     break;
                 case Opcode.sw:
                     tmpBytes = this.Register.Read(instruction.Rt).ToBytes();
@@ -180,6 +253,22 @@ namespace MIPS.Simulator.VirtualMachine
                     break;
             }
         }
+        // return := is performed
+        private bool PcDirectJump(Instruction instruction)
+        {
+            if (instruction.Type == FormatType.Jump)
+            {
+                this.Pc = (this.Pc & 0xf0000000) | (instruction.WordAddress << 2);  // *= 4
+                return true;
+            }
+            if (instruction.Type == FormatType.Register && instruction.Funct == Funct.jr)
+            {
+                this.Pc = this.Register.Read(instruction.Rs).ToUInt();
+                return true;
+            }
+            return false;
+        }
+
         // jump to a relative address
         private void PcRelativeJump(Instruction instruction)
         {
@@ -188,6 +277,10 @@ namespace MIPS.Simulator.VirtualMachine
             {
                 case Opcode.beq:
                     if (this.Register.Read(instruction.Rs).ToInt() == this.Register.Read(instruction.Rt).ToInt())
+                        isJump = true;
+                    break;
+                case Opcode.bgtz:
+                    if (this.Register.Read(instruction.Rs).ToInt() > 0)
                         isJump = true;
                     break;
                 case Opcode.bne:

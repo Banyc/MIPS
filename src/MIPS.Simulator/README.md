@@ -5,14 +5,30 @@ A virtual machine that take binary string as input.
 ## Currently supported Instructions
 
 - add
+- addi
+- addiu
 - addu
 - and
+- andi
+- beq
+- bgtz
+- bne
+- j
+- jal
+- jr
+
+- lw
+- nor
+- or
+- ori
+- sll
+- slt
+- sltu
+- slti
+
+- srl
 - sub
 - subu
-- addi
-- lw
 - sw
-- jal
-- beq
-- bne
+- xor
 - halt

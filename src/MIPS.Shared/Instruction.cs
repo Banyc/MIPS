@@ -48,7 +48,7 @@ namespace MIPS.Shared
     {
         RType = 0b000000,
         addi = 0b001000,
-        addiu = 0b001000,
+        addiu = 0b001001,
         andi = 0b001100,
         beq = 0b000100,
         bgez = 0b000001,
