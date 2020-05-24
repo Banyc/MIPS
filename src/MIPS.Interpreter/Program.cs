@@ -10,38 +10,38 @@ namespace MIPS.Interpreter
         {
             MipsToBinary mips = new MipsToBinary();
 
-            // file operation mode
-            if (args.Length > 1)
+            InterpretFile(mips, args);
+
+            // instruction
+            Console.WriteLine("Usage:");
+            Console.WriteLine("    ./MIPS.Interpreter.exe -s <file of MIPS code> -o <path to save binary> [-n]");
+            Console.WriteLine("    [-n] := (optional) enable new line for each instruction.");
+
+            bool isInteractiveMode = false;
+
+            while (!isInteractiveMode)
             {
-                string mipsFile = "";
-                string binPath = "";
-                int i;
-                for (i = 0; i < args.Length; i++)
+                // read file or interactive
+                Console.WriteLine("[R]Read instructions from file or [I]Interactively interpret instruction?");
+                Console.Write("> ");
+
+                string choice = Console.ReadLine();
+                switch (choice)
                 {
-                    if (args[i] == "-s" && i + 1 < args.Length)
-                    {
-                        mipsFile = args[i + 1];
-                    }
-                    else if (args[i] == "-o" && i + 1 < args.Length)
-                    {
-                        binPath = args[i + 1];
-                    }
+                    case "r":
+                    case "R":
+                        Console.Write("> ");
+                        string input = Console.ReadLine();
+                        InterpretFile(mips, input.Split());
+                        break;
+                    case "I":
+                    case "i":
+                        isInteractiveMode = true;
+                        break;
                 }
-                if (mipsFile == "" || binPath == "")
-                {
-                    Console.WriteLine("Input error!");
-                    return;
-                }
-                string input = File.ReadAllText(mipsFile);
-                string binary = mips.GetBinaryString(input, false);
-                File.WriteAllText(binPath, binary);
-                Console.WriteLine("Done");
-                return;
             }
 
             // interactive mode
-            Console.WriteLine("Usage:");
-            Console.WriteLine("    ./MIPS.Interpreter.exe -s [file of MIPS code] -o [path to save binary]");
             Console.WriteLine("Please input a complete instruction for each line.");
 
             while (true)
@@ -62,6 +62,44 @@ namespace MIPS.Interpreter
             // input += "move $t3, $t1\n";
             // input += "bgt $t3, $t1, label \n";
             // input += "addi $s3, $a1, -12 \n";
+        }
+
+        private static void InterpretFile(MipsToBinary mips, string[] args)
+        {
+            bool isWithNewLines = false;
+
+            // file operation mode
+            if (args.Length > 1)
+            {
+                string mipsFile = "";
+                string binPath = "";
+                int i;
+                for (i = 0; i < args.Length; i++)
+                {
+                    if (args[i] == "-s" && i + 1 < args.Length)
+                    {
+                        mipsFile = args[i + 1];
+                    }
+                    else if (args[i] == "-o" && i + 1 < args.Length)
+                    {
+                        binPath = args[i + 1];
+                    }
+                    else if (args[i] == "-n")
+                    {
+                        isWithNewLines = true;
+                    }
+                }
+                if (mipsFile == "" || binPath == "")
+                {
+                    Console.WriteLine("Input error!");
+                    return;
+                }
+                string input = File.ReadAllText(mipsFile);
+                string binary = mips.GetBinaryString(input, isWithNewLines);
+                File.WriteAllText(binPath, binary);
+                Console.WriteLine("Done");
+                return;
+            }
         }
     }
 }

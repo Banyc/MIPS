@@ -2,21 +2,43 @@
 
 Generate lexer and parser.
 
+## Prerequisite
+
+First, install ANTLR sdk.
+
+Then make some alias command to the PATH.
+
+```cmd
+REM antlr.cmd
+@echo off
+echo.
+java -jar "PATH\TO\antlr-4.8-complete.jar" %*
+```
+
+```cmd
+REM antlrc.cmd
+javac -classpath .;"PATH\TO\antlr-4.8-complete.jar" *.java
+```
+
+```cmd
+REM grun.cmd
+java -cp .;"PATH\TO\antlr-4.8-complete.jar" org.antlr.v4.gui.TestRig %*
+```
+
 ## Generate code
 
 Set `pwd` to current folder first. Then run the following command.
 
-<!-- java -jar antlr-4.8-complete.jar -Dlanguage=CSharp -visitor Hello.g4  -->
 ```
-java -jar antlr-4.8-complete.jar -Dlanguage=CSharp -visitor -o MipsToBinary MipsAsm/MipsAsm.g4
+antlr -Dlanguage=CSharp -visitor -o MipsAsm MipsAsm.g4
 ```
 
 ## Make customized visitor
 
 1. create new class file
-1. inherit it from IYOURGRAMMARNAMEVisiter
+1. inherit it from IYOURGRAMMARNAMEVisiter<object>
 1. resolve errors
-1. inherit it from YOURGRAMMARNAMEBaseVisiter
+1. inherit it from YOURGRAMMARNAMEBaseVisiter<object>
 1. delete unnecessary methods
 1. implement remaining methods
 
