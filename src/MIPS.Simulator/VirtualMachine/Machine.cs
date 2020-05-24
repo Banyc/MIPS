@@ -249,7 +249,7 @@ namespace MIPS.Simulator.VirtualMachine
                     break;
                 case Opcode.jal:
                     // https://chortle.ccsu.edu/AssemblyTutorial/Chapter-26/ass26_4.html
-                    this.Register.Write(RegisterType.ra, new Word32b(this.Pc + 4));
+                    this.Register.Write(RegisterType.ra, new Word32b(this.Pc));
                     break;
             }
         }
