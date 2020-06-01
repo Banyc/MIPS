@@ -16,6 +16,8 @@ namespace MIPS.Interpreter
             Console.WriteLine("Usage:");
             Console.WriteLine("    ./MIPS.Interpreter.exe -s <file of MIPS code> -o <path to save binary> [-n]");
             Console.WriteLine("    [-n] := (optional) enable new line for each instruction.");
+            Console.WriteLine("    [-h] := (optional) hex.");
+            Console.WriteLine("    [-p] := (optional) (hex only) add space partion for each byte.");
 
             bool isInteractiveMode = false;
 
@@ -67,6 +69,8 @@ namespace MIPS.Interpreter
         private static void InterpretFile(MipsToBinary mips, string[] args)
         {
             bool isWithNewLines = false;
+            bool isHex = false;
+            bool isBytePartition = false;
 
             // file operation mode
             if (args.Length > 1)
@@ -88,6 +92,14 @@ namespace MIPS.Interpreter
                     {
                         isWithNewLines = true;
                     }
+                    else if (args[i] == "-h")
+                    {
+                        isHex = true;
+                    }
+                    else if (args[i] == "-p")
+                    {
+                        isBytePartition = true;
+                    }
                 }
                 if (mipsFile == "" || binPath == "")
                 {
@@ -95,7 +107,11 @@ namespace MIPS.Interpreter
                     return;
                 }
                 string input = File.ReadAllText(mipsFile);
-                string binary = mips.GetBinaryString(input, isWithNewLines);
+                string binary;
+                if (!isHex)
+                    binary = mips.GetBinaryString(input, isWithNewLines);
+                else
+                    binary = mips.GetHexString(input, isWithNewLines, isBytePartition);
                 File.WriteAllText(binPath, binary);
                 Console.WriteLine("Done");
                 return;

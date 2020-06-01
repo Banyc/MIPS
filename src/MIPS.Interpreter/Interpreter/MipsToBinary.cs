@@ -81,5 +81,31 @@ namespace MIPS.Interpreter.Interpreter
             MachineCodePack codePack = prog.ToMachineCode();
             return codePack.ToBinaryString(isWithNewLines);
         }
+
+        public string GetHexString(string mipsCode, bool isWithNewLines, bool isBytePartition) {
+            ProgramInfo prog = ParseMips(mipsCode);
+            MachineCodePack codePack = prog.ToMachineCode();
+            string hex = codePack.ToHexString(false);
+            if (isBytePartition || isWithNewLines)
+            {
+                StringBuilder partitioned = new StringBuilder();
+                int cursor = 0;
+                while (cursor < hex.Length)
+                {
+                    partitioned.Append(hex.Substring(cursor, 2));
+                    cursor += 2;
+                    if (cursor % 8 == 0 && isWithNewLines)
+                    {
+                        partitioned.Append("\n");
+                    }
+                    else if (isBytePartition)
+                    {
+                        partitioned.Append(" ");
+                    }
+                }
+                return partitioned.ToString();
+            }
+            return hex;
+        }
     }
 }

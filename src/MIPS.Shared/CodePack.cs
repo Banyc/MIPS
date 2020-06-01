@@ -41,14 +41,14 @@ namespace MIPS.Shared
 
         public string ToHexString(bool isWithSpaces)
         {
-            StringBuilder binary = new StringBuilder();
+            StringBuilder hex = new StringBuilder();
             foreach (var word in this._codeList)
             {
-                binary.Append(word.ToHexString());
+                hex.Append(word.ToHexString());
                 if (isWithSpaces)
-                    binary.Append(" ");
+                    hex.Append(" ");
             }
-            return binary.ToString();
+            return hex.ToString();
         }
 
         public string ToMipsString()
