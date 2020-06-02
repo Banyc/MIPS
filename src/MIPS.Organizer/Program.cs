@@ -67,8 +67,24 @@ namespace MIPS.Organizer
                         MachineCodePack machineCode = prog.ToMachineCode();
                         vm.Reset(machineCode);
                         break;
+                    case "h":  // write hex to RAM
+                               // `h <path to hex>`
+                        WriteRawTextCodeToRam(input[1], vm, CodingSystem.Hex);
+                        break;
+                    case "b":  // write binary to RAM
+                               // `b <path to binary>`
+                        WriteRawTextCodeToRam(input[1], vm, CodingSystem.Binary);
+                        break;
                 }
             }
+        }
+
+        private static void WriteRawTextCodeToRam(string filePath, Machine vm, CodingSystem coding)
+        {
+            string rawTextCode;
+            rawTextCode = File.ReadAllText(filePath);
+            MachineCodePack machineCode = new MachineCodePack(rawTextCode, coding);
+            vm.Reset(machineCode);
         }
 
         private static void Step(Machine vm, int contextSize = 8)
@@ -112,6 +128,8 @@ namespace MIPS.Organizer
             Console.WriteLine("case \"a\":  write MIPS codes to RAM");
             Console.WriteLine("- `a`");
             Console.WriteLine("- `a <path to asm>`");
+            Console.WriteLine("case \"h\":  write hex to RAM");
+            Console.WriteLine("- `h <path to hex>`");
         }
 
         private static string AskForMipsCode()
