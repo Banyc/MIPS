@@ -39,7 +39,15 @@ namespace MIPS.Organizer
                         break;
                     case "d":  // read RAM
                                // `d <address> <length/4Bytes> <0:little-endian/1:big-endian>`
-                        uint.TryParse(input[1], out address);
+                        try
+                        {
+                            address = (uint)new System.ComponentModel.UInt32Converter().ConvertFromString(input[1]);
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("[Error] Invalid Address");
+                            continue;
+                        }
                         if (input.Length >= 3)
                             uint.TryParse(input[2], out length4Bytes);
                         if (input.Length >= 4)
@@ -49,7 +57,15 @@ namespace MIPS.Organizer
                     case "u":  // read RAM as instructions
                                // binarty -> MIPS asm
                                // `u <address> <length/4Bytes>`
-                        uint.TryParse(input[1], out address);
+                        try
+                        {
+                            address = (uint)new System.ComponentModel.UInt32Converter().ConvertFromString(input[1]);
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("[Error] Invalid Address");
+                            continue;
+                        }
                         if (input.Length >= 3)
                             uint.TryParse(input[2], out length4Bytes);
                         Console.WriteLine(vm.GetMipsString(address, length4Bytes));
@@ -82,7 +98,15 @@ namespace MIPS.Organizer
         private static void WriteRawTextCodeToRam(string filePath, Machine vm, CodingSystem coding)
         {
             string rawTextCode;
-            rawTextCode = File.ReadAllText(filePath);
+            try
+            {
+                rawTextCode = File.ReadAllText(filePath);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[Error] Invalid file");
+                return;
+            }
             MachineCodePack machineCode = new MachineCodePack(rawTextCode, coding);
             vm.Reset(machineCode);
         }
