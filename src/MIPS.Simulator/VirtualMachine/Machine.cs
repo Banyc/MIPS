@@ -225,6 +225,10 @@ namespace MIPS.Simulator.VirtualMachine
                     tmpInt = instruction.Immediate & tmpInt;
                     this.Register.Write(instruction.Rt, new Word32b(tmpInt));
                     break;
+                case Opcode.lui:  // $t = (imm << 16);
+                    tmpInt = instruction.Immediate << 16;
+                    this.Register.Write(instruction.Rt, new Word32b(tmpInt));
+                    break;
                 case Opcode.lw:  // offset unit := 1 byte
                     tmpUInt = this.Register.Read(instruction.Rs).ToUInt();
                     tmpBytes = this.Ram.Read((uint)((int)tmpUInt + instruction.Immediate)).ToBytes();
