@@ -9,13 +9,16 @@ namespace MIPS.Simulator.VirtualMachine
     {
         // public byte[,] Registers = new byte[32, 4];
         public Dictionary<RegisterType, Word32b> Registers = new Dictionary<RegisterType, Word32b>();
+        private readonly StorageLogger<RegisterType> _logger;
 
-        public RegisterStorage()
+        public RegisterStorage(StorageLogger<RegisterType> logger)
         {
+            _logger = logger;
         }
 
         public void Write(RegisterType address, Word32b newValue)
         {
+            _logger.LogChange(address, this.Read(address), newValue);
             this.Registers[address] = newValue;
         }
 

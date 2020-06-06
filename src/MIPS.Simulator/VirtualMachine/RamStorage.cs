@@ -10,8 +10,11 @@ namespace MIPS.Simulator.VirtualMachine
         // data size for RAM := word = 32 bits (4 bytes)
         // address unit := 4 bits (1 byte)
         public Dictionary<uint, byte> Memory = new Dictionary<uint, byte>();
-        public RamStorage()
+        private readonly StorageLogger<uint> _logger;
+
+        public RamStorage(StorageLogger<uint> logger)
         {
+            _logger = logger;
         }
 
         public string ReadAsHex(uint address, uint length4Bytes = 1, Endian endian = Endian.LittleEndian)
@@ -46,6 +49,7 @@ namespace MIPS.Simulator.VirtualMachine
         // address in byte, not word
         public void Write(uint address, Word32b newValue)
         {
+            _logger.LogChange(address, this.Read(address), newValue);
             uint i;
             for (i = 0; i < 4; i++)
             {

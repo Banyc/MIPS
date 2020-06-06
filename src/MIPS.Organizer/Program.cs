@@ -116,7 +116,7 @@ namespace MIPS.Organizer
             if (vm.IsHalt)
                 return;
             Console.WriteLine("-----");
-            // print the executing instruction
+            // print the executing instructions
             int i;
             for (i = contextSize - 1; i >= 0; i--)
             {
@@ -125,7 +125,7 @@ namespace MIPS.Organizer
             }
             // go to next step
             vm.Step();
-            // print the next instruction
+            // print the next instructions
             if (vm.IsHalt)
                 Console.WriteLine("Program Exited");
             else
@@ -135,6 +135,27 @@ namespace MIPS.Organizer
                 {
                     Console.Write($"{(vm.Pc / 4 + i + 1).ToString().PadLeft(2, ' ')}    {vm.GetMipsString((uint)(vm.Pc + i * 4), 1)}");
                 }
+            }
+            // print changes
+            if (!vm.RamLogger.IsEmpty)
+            {
+                Console.WriteLine();
+                // Console.WriteLine("RAM changes: ");
+                foreach (var pair in vm.RamLogger.GetLog())
+                {
+                    Console.Write($"0x{pair.Key.ToString("X")}: 0x{pair.Value.oldValue.ToHexString()} -> 0x{pair.Value.newValue.ToHexString()} ");
+                }
+                Console.WriteLine();
+            }
+            if (!vm.RegisterLogger.IsEmpty)
+            {
+                Console.WriteLine();
+                // Console.WriteLine("Register changes: ");
+                foreach (var pair in vm.RegisterLogger.GetLog())
+                {
+                    Console.Write($"{pair.Key}: 0x{pair.Value.oldValue.ToHexString()} -> 0x{pair.Value.newValue.ToHexString()} ");
+                }
+                Console.WriteLine();
             }
         }
 

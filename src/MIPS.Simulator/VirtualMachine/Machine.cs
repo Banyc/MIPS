@@ -15,6 +15,8 @@ namespace MIPS.Simulator.VirtualMachine
         public RegisterStorage Register;
         // code is stored in RAM, starting from 0
         public RamStorage Ram;
+        public StorageLogger<RegisterType> RegisterLogger { get; private set; } = new StorageLogger<RegisterType>();
+        public StorageLogger<uint> RamLogger { get; private set; } = new StorageLogger<uint>();
 
         public Machine()
         {
@@ -50,8 +52,8 @@ namespace MIPS.Simulator.VirtualMachine
             _machineCode = machineCode;
             this.Pc = 0;
             this.IsHalt = false;
-            this.Register = new RegisterStorage();
-            this.Ram = new RamStorage();
+            this.Register = new RegisterStorage(this.RegisterLogger);
+            this.Ram = new RamStorage(this.RamLogger);
             this.Codes = new CodeReader(this.Ram, machineCode);
         }
         // query Ram
@@ -84,9 +86,13 @@ namespace MIPS.Simulator.VirtualMachine
         // the main loop happens here
         private void LoopContainer()
         {
+            this.RamLogger.Clear();
+            this.RegisterLogger.Clear();
             RunNextInstruction();
             while (!_isDebug)
             {
+                this.RamLogger.Clear();
+                this.RegisterLogger.Clear();
                 RunNextInstruction();
             }
         }
