@@ -175,6 +175,8 @@ namespace MIPS.Organizer
             Console.WriteLine("- `a <path to asm>`");
             Console.WriteLine("case \"h\":  write hex to RAM");
             Console.WriteLine("- `h <path to hex>`");
+            Console.WriteLine("case \"b\":  write binary text to RAM");
+            Console.WriteLine("- `b <path to binary text file>`");
         }
 
         private static string AskForMipsCode()
