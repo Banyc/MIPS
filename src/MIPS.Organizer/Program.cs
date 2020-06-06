@@ -143,7 +143,7 @@ namespace MIPS.Organizer
                 // Console.WriteLine("RAM changes: ");
                 foreach (var pair in vm.RamLogger.GetLog())
                 {
-                    Console.Write($"0x{pair.Key.ToString("X")}: 0x{pair.Value.oldValue.ToHexString()} -> 0x{pair.Value.newValue.ToHexString()} ");
+                    Console.Write($"0x{pair.Key.ToString("x")}: 0x{pair.Value.oldValue.ToHexString()} -> 0x{pair.Value.newValue.ToHexString()} ");
                 }
                 Console.WriteLine();
             }
