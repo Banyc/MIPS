@@ -27,6 +27,9 @@ namespace MIPS.Organizer
                 string[] input = Console.ReadLine().Split();
                 switch (input[0])
                 {
+                    case "c":  // continue
+                        Continue(vm);
+                        break;
                     case "s":  // go to next step
                         Step(vm);
                         break;
@@ -82,6 +85,8 @@ namespace MIPS.Organizer
                         ProgramInfo prog = converter.ParseMips(mips);
                         MachineCodePack machineCode = prog.ToMachineCode();
                         vm.Reset(machineCode);
+                        // do not log the changes caused by program loading
+                        vm.CleanLog();
                         break;
                     case "h":  // write hex to RAM
                                // `h <path to hex>`
@@ -111,6 +116,13 @@ namespace MIPS.Organizer
             vm.Reset(machineCode);
         }
 
+        private static void Continue(Machine vm)
+        {
+            vm.Continue();
+            PrintChanges(vm);
+            vm.CleanLog();
+        }
+
         private static void Step(Machine vm, int contextSize = 8)
         {
             if (vm.IsHalt)
@@ -137,6 +149,14 @@ namespace MIPS.Organizer
                 }
             }
             // print changes
+            PrintChanges(vm);
+            vm.CleanLog();
+        }
+
+        private static void PrintChanges(Machine vm)
+        {
+            // print changes
+            // RAM
             if (!vm.RamLogger.IsEmpty)
             {
                 Console.WriteLine();
@@ -147,6 +167,7 @@ namespace MIPS.Organizer
                 }
                 Console.WriteLine();
             }
+            // Registers
             if (!vm.RegisterLogger.IsEmpty)
             {
                 Console.WriteLine();
@@ -161,6 +182,8 @@ namespace MIPS.Organizer
 
         private static void Prologue()
         {
+            Console.WriteLine("case \"c\":  continue until instruction `halt` is hit");
+            Console.WriteLine("- `c`");
             Console.WriteLine("case \"s\":  go to next step");
             Console.WriteLine("- `s`");
             Console.WriteLine("case \"r\":  read register");

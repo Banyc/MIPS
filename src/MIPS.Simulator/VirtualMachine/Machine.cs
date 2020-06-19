@@ -7,14 +7,14 @@ namespace MIPS.Simulator.VirtualMachine
     public class Machine
     {
         private bool _isDebug = false;  // step by step debug
-        public uint Pc;
-        public bool IsHalt;  // program has exited
+        public uint Pc { get; set; }
+        public bool IsHalt { get; set; }  // program has exited
 
-        private MachineCodePack _machineCode;
-        public CodeReader Codes;
-        public RegisterStorage Register;
+        private MachineCodePack machineCode;
+        public CodeReader Codes { get; set; }
+        public RegisterStorage Register { get; set; }
         // code is stored in RAM, starting from 0
-        public RamStorage Ram;
+        public RamStorage Ram { get; set; }
         public StorageLogger<RegisterType> RegisterLogger { get; private set; } = new StorageLogger<RegisterType>();
         public StorageLogger<uint> RamLogger { get; private set; } = new StorageLogger<uint>();
 
@@ -31,7 +31,7 @@ namespace MIPS.Simulator.VirtualMachine
         // start from the beginning
         public void Run()
         {
-            Reset(_machineCode);
+            Reset(this.machineCode);
             Continue();
         }
         // go to next step in debug mode
@@ -49,7 +49,7 @@ namespace MIPS.Simulator.VirtualMachine
         // set the new binary
         public void Reset(MachineCodePack machineCode)
         {
-            _machineCode = machineCode;
+            this.machineCode = machineCode;
             this.Pc = 0;
             this.IsHalt = false;
             this.Register = new RegisterStorage(this.RegisterLogger);
@@ -77,6 +77,12 @@ namespace MIPS.Simulator.VirtualMachine
             return this.Register.Read(reg);
         }
 
+        public void CleanLog()
+        {
+            this.RamLogger.Clear();
+            this.RegisterLogger.Clear();
+        }
+
         // TODO: encapsulate
         public string GetMipsString(uint address, uint length4Bytes)
         {
@@ -86,13 +92,11 @@ namespace MIPS.Simulator.VirtualMachine
         // the main loop happens here
         private void LoopContainer()
         {
-            this.RamLogger.Clear();
-            this.RegisterLogger.Clear();
+            // CleanLog();
             RunNextInstruction();
-            while (!_isDebug)
+            while (!_isDebug && !this.IsHalt)
             {
-                this.RamLogger.Clear();
-                this.RegisterLogger.Clear();
+                // CleanLog();
                 RunNextInstruction();
             }
         }
