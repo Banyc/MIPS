@@ -15,7 +15,7 @@ namespace MIPS.Simulator
 
             // string binary = Console.ReadLine();
 
-            // Machine vm = new Machine(binary);
+            // MipsMachine vm = new Machine(binary);
             // // vm.Continue();  // for developping debug only
 
             // // interactive

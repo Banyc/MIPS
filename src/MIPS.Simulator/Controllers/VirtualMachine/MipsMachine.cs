@@ -5,7 +5,7 @@ using MIPS.Shared.Models;
 
 namespace MIPS.Simulator.Controllers.VirtualMachine
 {
-    public class Machine
+    public class MipsMachine
     {
         private bool _isDebug = false;  // step by step debug
         public uint Pc { get; set; }
@@ -19,12 +19,12 @@ namespace MIPS.Simulator.Controllers.VirtualMachine
         public StorageLogger<RegisterType> RegisterLogger { get; private set; } = new StorageLogger<RegisterType>();
         public StorageLogger<uint> RamLogger { get; private set; } = new StorageLogger<uint>();
 
-        public Machine()
+        public MipsMachine()
         {
             Reset(new MachineCodePack());
         }
 
-        public Machine(MachineCodePack machineCode)
+        public MipsMachine(MachineCodePack machineCode)
         {
             Reset(machineCode);
         }

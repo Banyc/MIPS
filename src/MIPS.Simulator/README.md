@@ -2,7 +2,7 @@
 
 A virtual machine that take binary string as input.
 
-## Currently supported Instructions
+## Currently Supported Instructions
 
 - add
 - addi

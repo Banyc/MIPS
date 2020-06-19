@@ -12,7 +12,7 @@ namespace MIPS.Organizer
     {
         static void Main(string[] args)
         {
-            Machine vm = new Machine();
+            MipsMachine vm = new MipsMachine();
             MipsToBinary converter = new MipsToBinary();
 
             Prologue();
@@ -101,7 +101,7 @@ namespace MIPS.Organizer
             }
         }
 
-        private static void WriteRawTextCodeToRam(string filePath, Machine vm, CodingSystem coding)
+        private static void WriteRawTextCodeToRam(string filePath, MipsMachine vm, CodingSystem coding)
         {
             string rawTextCode;
             try
@@ -117,14 +117,14 @@ namespace MIPS.Organizer
             vm.Reset(machineCode);
         }
 
-        private static void Continue(Machine vm)
+        private static void Continue(MipsMachine vm)
         {
             vm.Continue();
             PrintChanges(vm);
             vm.CleanLog();
         }
 
-        private static void Step(Machine vm, int contextSize = 8)
+        private static void Step(MipsMachine vm, int contextSize = 8)
         {
             if (vm.IsHalt)
                 return;
@@ -154,7 +154,7 @@ namespace MIPS.Organizer
             vm.CleanLog();
         }
 
-        private static void PrintChanges(Machine vm)
+        private static void PrintChanges(MipsMachine vm)
         {
             // print changes
             // RAM
