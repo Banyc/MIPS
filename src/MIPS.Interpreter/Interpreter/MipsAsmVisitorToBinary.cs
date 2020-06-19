@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MIPS.Shared;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using MIPS.Shared.Models;
 
 namespace MIPS.Interpreter.Interpreter
 {

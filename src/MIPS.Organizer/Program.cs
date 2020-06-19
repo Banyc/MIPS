@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
-using MIPS.Simulator.VirtualMachine;
 using MIPS.Interpreter.Interpreter;
 using MIPS.Shared;
 using System.Text;
+using MIPS.Shared.Models;
+using MIPS.Simulator.Controllers.VirtualMachine;
 
 namespace MIPS.Organizer
 {
@@ -11,8 +12,8 @@ namespace MIPS.Organizer
     {
         static void Main(string[] args)
         {
-            MIPS.Simulator.VirtualMachine.Machine vm = new Simulator.VirtualMachine.Machine();
-            MIPS.Interpreter.Interpreter.MipsToBinary converter = new MIPS.Interpreter.Interpreter.MipsToBinary();
+            Machine vm = new Machine();
+            MipsToBinary converter = new MipsToBinary();
 
             Prologue();
 

@@ -1,6 +1,7 @@
 using MIPS.Shared;
+using MIPS.Shared.Models;
 
-namespace MIPS.Simulator.VirtualMachine
+namespace MIPS.Simulator.Interfaces
 {
     public interface IStorage<T>
     {

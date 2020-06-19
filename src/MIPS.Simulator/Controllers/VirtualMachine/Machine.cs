@@ -1,8 +1,9 @@
 using System;
 using System.Text;
 using MIPS.Shared;
+using MIPS.Shared.Models;
 
-namespace MIPS.Simulator.VirtualMachine
+namespace MIPS.Simulator.Controllers.VirtualMachine
 {
     public class Machine
     {

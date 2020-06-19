@@ -1,8 +1,10 @@
 using System;
 using System.Text;
 using MIPS.Shared;
+using MIPS.Shared.Models;
+using MIPS.Simulator.Interfaces;
 
-namespace MIPS.Simulator.VirtualMachine
+namespace MIPS.Simulator.Controllers.VirtualMachine
 {
     // responsible for machine code query and disassembly based on an existing IStorage
     public class CodeReader

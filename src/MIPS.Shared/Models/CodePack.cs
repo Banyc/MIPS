@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MIPS.Shared
+namespace MIPS.Shared.Models
 {
     // Manage a list of words as machine code (not MIPS assembly)
     // this class responsible for any type or format convertion within the code

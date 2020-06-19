@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using MIPS.Simulator.VirtualMachine;
 using MIPS.Shared;
 
 namespace MIPS.Simulator

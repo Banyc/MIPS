@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MIPS.Shared;
+using MIPS.Shared.Models;
+using MIPS.Simulator.Interfaces;
 
-namespace MIPS.Simulator.VirtualMachine
+namespace MIPS.Simulator.Controllers.VirtualMachine
 {
     public class RegisterStorage : IStorage<RegisterType>
     {

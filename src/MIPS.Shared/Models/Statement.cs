@@ -1,4 +1,4 @@
-namespace MIPS.Shared
+namespace MIPS.Shared.Models
 {
     public class Statement
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MIPS.Shared
+namespace MIPS.Shared.Models
 {
     // this class only serves for AST (abstract syntax tree)
     // the class does not take responsibility for disassembled MIPS codes
