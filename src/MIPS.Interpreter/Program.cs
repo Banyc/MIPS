@@ -14,7 +14,7 @@ namespace MIPS.Interpreter
 
             // instruction
             Console.WriteLine("Usage:");
-            Console.WriteLine("    ./MIPS.Interpreter.exe -s <file of MIPS code> -o <path to save binary> [-n]");
+            Console.WriteLine("    ./MIPS.Interpreter.exe -s <file of MIPS code> -o <path to save binary> [-n] [-h] [-p]");
             Console.WriteLine("    [-n] := (optional) enable new line for each instruction.");
             Console.WriteLine("    [-h] := (optional) hex.");
             Console.WriteLine("    [-p] := (optional) (hex only) add space partion for each byte.");
