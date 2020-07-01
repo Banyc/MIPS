@@ -115,6 +115,12 @@ namespace MIPS.Organizer
             }
             MachineCodePack machineCode = new MachineCodePack(rawTextCode, coding);
             vm.Reset(machineCode);
+
+            // print the next instructions
+            PrintNextInstructions(vm, 16);
+            // // print changes
+            // PrintChanges(vm);
+            vm.CleanLog();
         }
 
         private static void Continue(MipsMachine vm)
@@ -139,6 +145,16 @@ namespace MIPS.Organizer
             // go to next step
             vm.Step();
             // print the next instructions
+            PrintNextInstructions(vm, contextSize);
+            // print changes
+            PrintChanges(vm);
+            vm.CleanLog();
+        }
+
+        private static void PrintNextInstructions(MipsMachine vm, int contextSize = 8)
+        {
+            int i;
+            // print the next instructions
             if (vm.IsHalt)
                 Console.WriteLine("Program Exited");
             else
@@ -149,9 +165,6 @@ namespace MIPS.Organizer
                     Console.Write($"{(vm.Pc / 4 + i + 1).ToString().PadLeft(2, ' ')}    {vm.GetMipsString((uint)(vm.Pc + i * 4), 1)}");
                 }
             }
-            // print changes
-            PrintChanges(vm);
-            vm.CleanLog();
         }
 
         private static void PrintChanges(MipsMachine vm)
