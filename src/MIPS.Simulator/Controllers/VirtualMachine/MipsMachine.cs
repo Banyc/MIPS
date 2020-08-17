@@ -15,7 +15,8 @@ namespace MIPS.Simulator.Controllers.VirtualMachine
         public CodeReader Codes { get; set; }
         public RegisterStorage Register { get; set; }
         // code is stored in RAM, starting from 0
-        public RamStorage Ram { get; set; }
+        // public RamStorage Ram { get; set; }
+        public RamArrayStorage Ram { get; set; }
         public StorageLogger<RegisterType> RegisterLogger { get; private set; } = new StorageLogger<RegisterType>();
         public StorageLogger<uint> RamLogger { get; private set; } = new StorageLogger<uint>();
 
@@ -54,7 +55,8 @@ namespace MIPS.Simulator.Controllers.VirtualMachine
             this.Pc = 0;
             this.IsHalt = false;
             this.Register = new RegisterStorage(this.RegisterLogger);
-            this.Ram = new RamStorage(this.RamLogger);
+            // this.Ram = new RamStorage(this.RamLogger);
+            this.Ram = new RamArrayStorage(this.RamLogger);
             this.Codes = new CodeReader(this.Ram, machineCode);
         }
         // query Ram
