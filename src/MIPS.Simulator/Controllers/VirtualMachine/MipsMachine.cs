@@ -17,8 +17,8 @@ namespace MIPS.Simulator.Controllers.VirtualMachine
         // code is stored in RAM, starting from 0
         // public RamStorage Ram { get; set; }
         public RamArrayStorage Ram { get; set; }
-        public StorageLogger<RegisterType> RegisterLogger { get; private set; } = new StorageLogger<RegisterType>();
-        public StorageLogger<uint> RamLogger { get; private set; } = new StorageLogger<uint>();
+        public StorageLogger<RegisterType> RegisterLogger { get; } = new StorageLogger<RegisterType>();
+        public StorageLogger<uint> RamLogger { get; } = new StorageLogger<uint>();
 
         public MipsMachine()
         {

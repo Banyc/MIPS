@@ -21,7 +21,7 @@ namespace MIPS.Shared.Models
     public class Word32b
     {
         // stored in little-endian
-        private byte[] Value = new byte[4];
+        public readonly byte[] Value = new byte[4];
 
         public Word32b(string value, CodingSystem system)
         {

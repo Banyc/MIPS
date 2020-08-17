@@ -8,7 +8,7 @@ using MIPS.Shared.Models;
 namespace MIPS.Interpreter.Interpreter
 {
     // main entry for the interpreter
-    public class MipsToBinary
+    public partial class MipsToBinary
     {
         public ProgramInfo ParseMips(string input)
         {
@@ -43,6 +43,10 @@ namespace MIPS.Interpreter.Interpreter
                     }
                 }
             }
+
+            // parse raw data segments
+            prog = ParseRawDataSegments(prog, input);
+
             return prog;
         }
 
