@@ -200,6 +200,19 @@ namespace MIPS.Shared.Models
                     // TODO: Handle Shamt
                     break;
                 case FormatType.Immediate:
+                    if (this.Opcode == Opcode.beq
+                        || this.Opcode == Opcode.bne)
+                    {
+                        // beq $s, $t, offset
+                        builder.Append(this.Opcode.ToString("g"));
+                        builder.Append(" $");
+                        builder.Append(this.Rs.ToString("g"));
+                        builder.Append(", $");
+                        builder.Append(this.Rt.ToString("g"));
+                        builder.Append(", ");
+                        builder.Append(this.Immediate);
+                        break;
+                    }
                     builder.Append(this.Opcode.ToString("g"));
                     builder.Append(" $");
                     builder.Append(this.Rt.ToString("g"));
