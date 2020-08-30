@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,7 @@ namespace MIPS.Shared.Models
         public MachineCodePack ToMachineCode()
         {
             List<Word32b> code = new List<Word32b>();
+            // write text segment
             foreach (var stat in this.Statements)
             {
                 string binary = stat.Instruction.ToBinaryString();
@@ -34,7 +36,11 @@ namespace MIPS.Shared.Models
         {
             foreach (RawDataSegment rawDataSegment in this.RawDataSegments)
             {
-                while ((rawDataSegment.StartAddress + rawDataSegment.Data.Count) / 4 + 1 > code.Count)
+                var sizeToEndOfRawDataSegment = (rawDataSegment.StartAddress + rawDataSegment.Data.Count);
+                var wordSizeCeiling = sizeToEndOfRawDataSegment / 4
+                    + (sizeToEndOfRawDataSegment % 4 == 0 ? 0 : 1);
+                while (
+                    wordSizeCeiling + 1 > code.Count)
                 {
                     code.Add(new Word32b("00000000", CodingSystem.Hex));
                 }
@@ -42,12 +48,13 @@ namespace MIPS.Shared.Models
                 int i;
                 for (i = 0; i < rawDataSegment.Data.Count; i++)
                 {
-                    uint currentAddress = rawDataSegment.StartAddress;
+                    uint currentAddress = rawDataSegment.StartAddress + (uint)i;
                     int index;
                     int offset;
                     (index, offset) = Pagination.GetTwoLevelIndex((int)currentAddress, 4);
                     Word32b word = code[index];
-                    word.Value[offset] = rawDataSegment.Data[i];
+                    // change endian
+                    word.Value[4 - offset - 1] = rawDataSegment.Data[i];
                 }
             }
 

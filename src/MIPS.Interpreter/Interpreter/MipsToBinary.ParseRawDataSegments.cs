@@ -91,6 +91,7 @@ namespace MIPS.Interpreter.Interpreter
             {
                 lineArray[i] = RemoveOneHeadCommentMark(lineArray[i]);
                 stringBuilder.Append(lineArray[i]);
+                stringBuilder.Append("\n");
             }
             return stringBuilder.ToString();
         }
