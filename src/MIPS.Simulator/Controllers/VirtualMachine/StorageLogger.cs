@@ -16,7 +16,14 @@ namespace MIPS.Simulator.Controllers.VirtualMachine
         }
         public void LogChange(T address, Word32b oldValue, Word32b newValue)
         {
-            _log[address] = (oldValue, newValue);
+            if (_log.ContainsKey(address))
+            {
+                _log[address] = (_log[address].oldValue, newValue);
+            }
+            else
+            {
+                _log[address] = (oldValue, newValue);
+            }
         }
         public Dictionary<T, (Word32b oldValue, Word32b newValue)> GetLog()
         {
