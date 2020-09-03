@@ -190,6 +190,32 @@ namespace MIPS.Shared.Models
                     builder.Append(this.Opcode.ToString("g"));
                     break;
                 case FormatType.Register:
+                    // Handle Shamt
+                    if (this.Funct == Funct.srl
+                        || this.Funct == Funct.sll)
+                    {
+                        builder.Append(this.Funct.ToString("g"));
+                        builder.Append(" $");
+                        builder.Append(this.Rd.ToString("g"));
+                        builder.Append(", $");
+                        builder.Append(this.Rt.ToString("g"));
+                        builder.Append(", ");
+                        builder.Append(this.Shamt.ToString("g"));
+                        break;
+                    }
+                    if (this.Funct == Funct.sllv
+                        || this.Funct == Funct.srlv)
+                    {
+                        builder.Append(this.Funct.ToString("g"));
+                        builder.Append(" $");
+                        builder.Append(this.Rd.ToString("g"));
+                        builder.Append(", $");
+                        builder.Append(this.Rt.ToString("g"));
+                        builder.Append(", $");
+                        builder.Append(this.Rs.ToString("g"));
+                        break;
+                    }
+                    // others
                     builder.Append(this.Funct.ToString("g"));
                     builder.Append(" $");
                     builder.Append(this.Rd.ToString("g"));
@@ -197,7 +223,6 @@ namespace MIPS.Shared.Models
                     builder.Append(this.Rs.ToString("g"));
                     builder.Append(", $");
                     builder.Append(this.Rt.ToString("g"));
-                    // TODO: Handle Shamt
                     break;
                 case FormatType.Immediate:
                     if (this.Opcode == Opcode.beq
@@ -213,6 +238,7 @@ namespace MIPS.Shared.Models
                         builder.Append(this.Immediate);
                         break;
                     }
+                    // others
                     builder.Append(this.Opcode.ToString("g"));
                     builder.Append(" $");
                     builder.Append(this.Rt.ToString("g"));
