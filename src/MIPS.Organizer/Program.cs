@@ -86,6 +86,8 @@ namespace MIPS.Organizer
                         ProgramInfo prog = converter.ParseMips(mips);
                         MachineCodePack machineCode = prog.ToMachineCode();
                         vm.Reset(machineCode);
+                        // print the next instructions
+                        PrintNextInstructions(vm, 16);
                         // do not log the changes caused by program loading
                         vm.CleanLog();
                         break;
@@ -196,24 +198,26 @@ namespace MIPS.Organizer
 
         private static void Prologue()
         {
-            Console.WriteLine("case \"c\":  continue until instruction `halt` is hit");
-            Console.WriteLine("- `c`");
-            Console.WriteLine("case \"s\":  go to next step");
-            Console.WriteLine("- `s`");
-            Console.WriteLine("case \"r\":  read register");
-            Console.WriteLine("- `r t0`");
-            Console.WriteLine("case \"d\":  read RAM");
-            Console.WriteLine("- `d <address> <length in 4 Bytes>`");
-            Console.WriteLine("- `d <address> <length in 4 Bytes> <True:little-endian/False:big-endian>`");
-            Console.WriteLine("case \"u\":  read RAM as instructions");
-            Console.WriteLine("- `u <address> <length in 4 Bytes>`");
-            Console.WriteLine("case \"a\":  write MIPS codes to RAM");
-            Console.WriteLine("- `a`");
-            Console.WriteLine("- `a <path to asm>`");
-            Console.WriteLine("case \"h\":  write hex to RAM");
-            Console.WriteLine("- `h <path to hex>`");
-            Console.WriteLine("case \"b\":  write binary text to RAM");
-            Console.WriteLine("- `b <path to binary text file>`");
+            Console.WriteLine("\nHello MIPS simulator\n");
+            Console.WriteLine("Usage:");
+            Console.WriteLine("    case \"c\":  continue until instruction `halt` is hit");
+            Console.WriteLine("    - `c`");
+            Console.WriteLine("    case \"s\":  go to next step");
+            Console.WriteLine("    - `s`");
+            Console.WriteLine("    case \"r\":  read register");
+            Console.WriteLine("    - `r t0`");
+            Console.WriteLine("    case \"d\":  read RAM");
+            Console.WriteLine("    - `d <address> <length in 4 Bytes>`");
+            Console.WriteLine("    - `d <address> <length in 4 Bytes> <True:little-endian/False:big-endian>`");
+            Console.WriteLine("    case \"u\":  read RAM as instructions");
+            Console.WriteLine("    - `u <address> <length in 4 Bytes>`");
+            Console.WriteLine("    case \"a\":  write MIPS codes to RAM");
+            Console.WriteLine("    - `a`");
+            Console.WriteLine("    - `a <path to asm>`");
+            Console.WriteLine("    case \"h\":  write hex to RAM");
+            Console.WriteLine("    - `h <path to hex>`");
+            Console.WriteLine("    case \"b\":  write binary text to RAM");
+            Console.WriteLine("    - `b <path to binary text file>`");
         }
 
         private static string AskForMipsCode()
