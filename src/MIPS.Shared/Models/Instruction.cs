@@ -98,7 +98,8 @@ namespace MIPS.Shared.Models
         public Funct Funct;
         // I Format
         // set at the second round of tree traversal if it is an offset of addresses
-        public int Immediate = 0;
+        public int Immediate = 0;  // sign extended
+        public int ImmediateZeroExtended = 0;
         // J Format
         public uint WordAddress = 0;  // set at the second round of tree traversal
         public string TargetLabelIdentity = null;  // set by j, beq, and others
@@ -142,6 +143,7 @@ namespace MIPS.Shared.Models
                     string immBinary = binary.Substring(16, 16);
                     immBinary = new string(immBinary[0], 16) + immBinary;
                     this.Immediate = Convert.ToInt32(immBinary, 2);
+                    this.ImmediateZeroExtended = this.Immediate & 0x0000ffff;
                     break;
                 case FormatType.Jump:
                     this.WordAddress = Convert.ToUInt32(binary.Substring(6, 26), 2);

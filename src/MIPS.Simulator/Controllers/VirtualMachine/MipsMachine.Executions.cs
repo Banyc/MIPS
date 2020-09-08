@@ -119,9 +119,10 @@ namespace MIPS.Simulator.Controllers.VirtualMachine
                     tmpUInt = (uint)instruction.Immediate + tmpUInt;
                     this.Register.Write(instruction.Rt, new Word32b(tmpUInt));
                     break;
+                // sign extension done on the immediate is zero extension
                 case Opcode.andi:
                     tmpInt = this.Register.Read(instruction.Rs).ToInt();
-                    tmpInt = instruction.Immediate & tmpInt;
+                    tmpInt = instruction.ImmediateZeroExtended & tmpInt;
                     this.Register.Write(instruction.Rt, new Word32b(tmpInt));
                     break;
                 case Opcode.lui:  // $t = (imm << 16);
@@ -133,9 +134,10 @@ namespace MIPS.Simulator.Controllers.VirtualMachine
                     tmpBytes = this.Ram.Read((uint)((int)tmpUInt + instruction.Immediate)).ToBytes();
                     this.Register.Write(instruction.Rt, new Word32b(tmpBytes));
                     break;
+                // sign extension done on the immediate is zero extension
                 case Opcode.ori:
                     tmpInt = this.Register.Read(instruction.Rs).ToInt();
-                    tmpInt = instruction.Immediate | tmpInt;
+                    tmpInt = instruction.ImmediateZeroExtended | tmpInt;
                     this.Register.Write(instruction.Rt, new Word32b(tmpInt));
                     break;
                 case Opcode.slti:
