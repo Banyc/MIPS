@@ -61,3 +61,7 @@ Data segment is parsed in the following manner:
 ## Currently Supported Instructions
 
 Go to [`README.md`](./src/MIPS.Simulator/README.md) under directory `MIPS.Simulator`.
+
+## TODO
+
+- [ ] Add project for RISC V.
